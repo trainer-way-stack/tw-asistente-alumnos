@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy"
+    content="
+      default-src 'self';
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com;
+      script-src 'self';
+      media-src 'self' blob: mediastream:;
+      connect-src 'self';
+    " />
+  <title>TW Asistente Alumnos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+<div class="panel">
+
+  <!-- ── HEADER ─────────────────────────────────────────── -->
+  <header class="header">
+    <div class="header-left">
+      <span class="logo">TW</span>
+      <span class="app-name">ASISTENTE</span>
+    </div>
+    <div class="header-right">
+      <button class="icon-btn" id="btn-config" title="Configuración">⚙</button>
+      <button class="btn-start" id="btn-toggle">START</button>
+    </div>
+  </header>
+
+  <!-- ── FASE ACTUAL ─────────────────────────────────────── -->
+  <section class="card" id="sec-fase">
+    <div class="card-label">FASE ACTUAL</div>
+    <div class="fase-nombre" id="fase-nombre">1 · MARCO</div>
+    <div class="progress-wrap">
+      <span class="progress-label" id="progress-pct">0%</span>
+      <div class="progress-track">
+        <div class="progress-fill" id="progress-fill"></div>
+      </div>
+    </div>
+    <div class="fase-desc" id="fase-desc">
+      Rapport + explicación de la charla + contraventa
+    </div>
+  </section>
+
+  <!-- ── SUGERENCIA ──────────────────────────────────────── -->
+  <section class="card card-suggestion">
+    <div class="card-label orange">DI AHORA:</div>
+    <div class="suggestion-box" id="suggestion-text">
+      Esperando transcripción para generar sugerencias...
+    </div>
+  </section>
+
+  <!-- ── ALERTA OBJECIÓN ─────────────────────────────────── -->
+  <section class="card card-alert hidden" id="sec-alerta">
+    <div class="alert-header">
+      <span class="alert-title" id="alert-title">⚠️ OBJECIÓN DETECTADA:</span>
+      <button class="alert-close" id="btn-alert-close" title="Cerrar">✕</button>
+    </div>
+    <div class="alert-body" id="alert-body"></div>
+  </section>
+
+  <!-- ── TRANSCRIPCIÓN (oculta por defecto) ────────────────── -->
+  <section class="card card-transcription hidden" id="sec-transcription">
+    <div class="card-label">TRANSCRIPCIÓN</div>
+    <div class="transcription-scroll" id="transcription-area">
+      <div class="transcript-placeholder" id="transcript-placeholder">
+        La transcripción aparecerá aquí al iniciar la grabación...
+      </div>
+    </div>
+  </section>
+
+  <!-- ── FOOTER ──────────────────────────────────────────── -->
+  <footer class="footer">
+    <div class="timer" id="timer">00:00</div>
+    <div class="status-wrap">
+      <span class="status-dot paused" id="status-dot"></span>
+      <span class="status-text" id="status-text">En pausa</span>
+    </div>
+    <button class="icon-btn" id="btn-transcript-toggle" title="Mostrar/ocultar transcripción">📝</button>
+    <button class="icon-btn" id="btn-copy" title="Copiar transcripción">📋</button>
+  </footer>
+
+</div><!-- .panel -->
+
+<script src="../src/audioCapture.js"></script>
+<script src="renderer.js"></script>
+</body>
+</html>

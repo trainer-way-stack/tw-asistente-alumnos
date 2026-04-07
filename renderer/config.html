@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta http-equiv="Content-Security-Policy"
+    content="
+      default-src 'self';
+      style-src 'self' 'unsafe-inline' https://fonts.googleapis.com;
+      font-src 'self' https://fonts.gstatic.com;
+      script-src 'self';
+      media-src 'self' blob: mediastream:;
+      connect-src 'self';
+    " />
+  <title>Configuracion - TW Asistente Alumnos</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body class="config-body">
+
+<div class="config-wrap">
+  <h1 class="config-title">Configuracion</h1>
+
+  <!-- Mis API Keys -->
+  <section class="config-section">
+    <h2 class="config-section-title">Mis API Keys</h2>
+
+    <div class="form-group">
+      <label class="form-label" for="openai-key">OpenAI API Key</label>
+      <div style="position:relative">
+        <input type="password" id="openai-key" class="form-input"
+          placeholder="sk-..." autocomplete="off" spellcheck="false"
+          style="padding-right:42px" />
+        <button type="button" class="btn-toggle-key" id="btn-toggle-openai"
+          title="Mostrar/ocultar" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:#888;cursor:pointer;font-size:16px;padding:4px">
+          👁
+        </button>
+      </div>
+      <p class="form-hint">Usada para transcribir la llamada. Consiguela en <strong>platform.openai.com</strong></p>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="anthropic-key">Anthropic API Key</label>
+      <div style="position:relative">
+        <input type="password" id="anthropic-key" class="form-input"
+          placeholder="sk-ant-..." autocomplete="off" spellcheck="false"
+          style="padding-right:42px" />
+        <button type="button" class="btn-toggle-key" id="btn-toggle-anthropic"
+          title="Mostrar/ocultar" style="position:absolute;right:8px;top:50%;transform:translateY(-50%);background:none;border:none;color:#888;cursor:pointer;font-size:16px;padding:4px">
+          👁
+        </button>
+      </div>
+      <p class="form-hint">Usada para analizar la llamada y darte sugerencias. Consiguela en <strong>console.anthropic.com</strong></p>
+    </div>
+
+    <button class="btn-test" id="btn-test">Verificar conexion</button>
+    <div class="test-result" id="test-result"></div>
+  </section>
+
+  <!-- Dispositivos de audio -->
+  <section class="config-section">
+    <h2 class="config-section-title">Dispositivos de Audio</h2>
+
+    <div class="form-group">
+      <label class="form-label" for="mic-device">Microfono (CLOSER)</label>
+      <select id="mic-device" class="form-select">
+        <option value="default">Microfono por defecto</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="system-source">Audio del sistema (CLIENTE)</label>
+      <select id="system-source" class="form-select">
+        <option value="">Sin audio del sistema</option>
+      </select>
+      <p class="form-hint">
+        <strong>OBLIGATORIO</strong> - captura la voz del cliente desde los altavoces.
+        En Windows, el audio del sistema solo se captura con fuentes de <strong>pantalla completa</strong>.
+        Asegurate de que Zoom/Meet reproduce por el dispositivo de audio por defecto.
+        En Mac requiere permiso de grabacion de pantalla.
+      </p>
+    </div>
+
+    <button class="btn-test" id="btn-test-audio">Probar audio del sistema (3s)</button>
+    <div class="test-result" id="audio-test-result"></div>
+  </section>
+
+  <!-- Mi negocio -->
+  <section class="config-section">
+    <h2 class="config-section-title">Mi negocio</h2>
+
+    <div class="form-group">
+      <label class="form-label" for="p-nicho">Nicho</label>
+      <input type="text" id="p-nicho" class="form-input"
+        placeholder="Ej: mujeres postparto que quieren perder peso" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="p-cliente">Cliente ideal</label>
+      <textarea id="p-cliente" class="form-input" rows="2"
+        placeholder="Ej: madre de 30-45 anos, frustrada por no recuperar su figura tras el parto"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="p-precio">Precio de tu servicio</label>
+      <input type="text" id="p-precio" class="form-input"
+        placeholder="Ej: 450 EUR trimestral" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="p-oferta-nombre">Nombre de tu oferta</label>
+      <input type="text" id="p-oferta-nombre" class="form-input"
+        placeholder="Ej: Metodo Equilibrio 90 dias" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="p-oferta-promesa">Promesa principal</label>
+      <textarea id="p-oferta-promesa" class="form-input" rows="2"
+        placeholder="Ej: pierde 4-8 kilos en 90 dias sin pasar hambre"></textarea>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="p-pilar1">Pilar 1</label>
+      <input type="text" id="p-pilar1" class="form-input"
+        placeholder="Ej: alimentacion flexible adaptada a tu rutina" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="p-pilar2">Pilar 2</label>
+      <input type="text" id="p-pilar2" class="form-input"
+        placeholder="Ej: entrenamientos de 30 min en casa" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="p-pilar3">Pilar 3</label>
+      <input type="text" id="p-pilar3" class="form-input"
+        placeholder="Ej: acompanamiento semanal 1-a-1" />
+    </div>
+
+    <div class="form-group">
+      <label class="form-label" for="p-resultados">Casos de exito (opcional)</label>
+      <textarea id="p-resultados" class="form-input" rows="3"
+        placeholder="Ej: Laura perdio 6 kilos en 3 meses. Maria volvio a ponerse sus vaqueros de antes del embarazo."></textarea>
+    </div>
+
+    <p class="form-hint" style="margin-top:12px">
+      Cuanto mas detallado sea tu perfil, mas precisas seran las sugerencias durante la llamada.
+    </p>
+
+    <button class="btn-test" id="btn-test-analysis">Probar analisis con mi perfil</button>
+    <div class="test-result" id="analysis-test-result"></div>
+  </section>
+
+  <!-- Guardar -->
+  <div class="config-actions">
+    <button class="btn-save" id="btn-save">Guardar</button>
+  </div>
+  <div class="save-msg" id="save-msg"></div>
+</div>
+
+<script src="config-renderer.js"></script>
+</body>
+</html>

@@ -1,0 +1,60 @@
+{
+  "name": "tw-asistente-alumnos",
+  "version": "1.0.0",
+  "description": "Asistente de ventas en tiempo real para alumnos de Trainer Way",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build:win": "electron-builder --win",
+    "build:mac": "electron-builder --mac"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "dotenv": "^16.4.5",
+    "openai": "^4.77.0"
+  },
+  "devDependencies": {
+    "electron": "^29.4.6",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.trainerway.asistente-alumnos",
+    "productName": "TW Asistente Alumnos",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "renderer/**/*",
+      "src/**/*",
+      "assets/**/*",
+      "node_modules/**/*"
+    ],
+    "win": {
+      "target": {
+        "target": "nsis",
+        "arch": ["x64"]
+      },
+      "signDlls": false
+    },
+    "mac": {
+      "target": [
+        {
+          "target": "dmg",
+          "arch": ["x64", "arm64"]
+        }
+      ],
+      "category": "public.app-category.business",
+      "extendInfo": {
+        "NSMicrophoneUsageDescription": "TW Asistente necesita acceso al microfono para transcribir la voz del closer durante la llamada de venta.",
+        "NSCameraUsageDescription": "TW Asistente no usa la camara.",
+        "NSAppleEventsUsageDescription": "TW Asistente no envia eventos AppleScript."
+      }
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true
+    }
+  }
+}
