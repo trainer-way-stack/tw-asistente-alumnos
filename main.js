@@ -160,7 +160,7 @@ function startClaudeTimer() {
       console.error('Claude error:', err.message);
       if (mainWindow) mainWindow.webContents.send('status-update', 'grabando');
     }
-  }, 30000);
+  }, 15000);
 }
 
 function stopClaudeTimer() {
