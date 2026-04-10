@@ -11,6 +11,9 @@ const fs = require('fs');
 const path = require('path');
 const os = require('os');
 
+// Pricing (USD per minute) — Whisper
+const WHISPER_PRICE_PER_MIN = 0.006;
+
 async function transcribeAudio(audioBuffer, openaiApiKey) {
   if (!openaiApiKey) throw new Error('Falta API Key de OpenAI');
 
@@ -25,8 +28,18 @@ async function transcribeAudio(audioBuffer, openaiApiKey) {
       model: 'whisper-1',
       file: fs.createReadStream(tmpPath),
       language: 'es',
+      response_format: 'verbose_json',
     });
-    return (transcription.text || '').trim();
+
+    const text = (transcription.text || '').trim();
+    const durationSec = typeof transcription.duration === 'number' ? transcription.duration : 0;
+    const costUsd = (durationSec / 60) * WHISPER_PRICE_PER_MIN;
+
+    return {
+      text,
+      durationSec,
+      costUsd,
+    };
   } finally {
     try { fs.unlinkSync(tmpPath); } catch {}
   }
@@ -42,4 +55,4 @@ async function verifyOpenAI(openaiApiKey) {
   return true;
 }
 
-module.exports = { transcribeAudio, verifyOpenAI };
+module.exports = { transcribeAudio, verifyOpenAI, WHISPER_PRICE_PER_MIN };

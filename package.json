@@ -1,6 +1,6 @@
 {
   "name": "tw-asistente-alumnos",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "Asistente de ventas en tiempo real para alumnos de Trainer Way",
   "main": "main.js",
   "scripts": {
@@ -11,6 +11,7 @@
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
     "dotenv": "^16.4.5",
+    "electron-updater": "^6.8.3",
     "openai": "^4.77.0"
   },
   "devDependencies": {
@@ -34,7 +35,9 @@
     "win": {
       "target": {
         "target": "nsis",
-        "arch": ["x64"]
+        "arch": [
+          "x64"
+        ]
       },
       "signDlls": false
     },
@@ -42,7 +45,10 @@
       "target": [
         {
           "target": "dmg",
-          "arch": ["x64", "arm64"]
+          "arch": [
+            "x64",
+            "arm64"
+          ]
         }
       ],
       "category": "public.app-category.business",
@@ -55,6 +61,13 @@
     "nsis": {
       "oneClick": false,
       "allowToChangeInstallationDirectory": true
-    }
+    },
+    "publish": [
+      {
+        "provider": "github",
+        "owner": "trainer-way-stack",
+        "repo": "tw-asistente-alumnos"
+      }
+    ]
   }
 }

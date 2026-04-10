@@ -338,6 +338,63 @@ body {
   font-weight: 500;
 }
 
+/* ─── Cost indicator ─────────────────────────────────────── */
+.cost {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text-dim);
+  font-variant-numeric: tabular-nums;
+  padding: 3px 7px;
+  border-radius: 4px;
+  background: rgba(255, 255, 255, 0.04);
+  transition: color 0.2s, background 0.2s;
+}
+.cost.cost-warn {
+  color: var(--orange);
+  background: rgba(255, 107, 0, 0.12);
+}
+.cost.cost-high {
+  color: #ff4444;
+  background: rgba(255, 68, 68, 0.15);
+}
+
+/* ─── Error card ─────────────────────────────────────────── */
+.card-error {
+  background: rgba(255, 68, 68, 0.08);
+  border-bottom: 1px solid rgba(255, 68, 68, 0.25);
+}
+.card-error.hidden { display: none; }
+.card-error .alert-title { color: #ff6666; }
+
+/* ─── Update notification ────────────────────────────────── */
+.card-update {
+  background: rgba(255, 107, 0, 0.08);
+  border-bottom: 1px solid rgba(255, 107, 0, 0.25);
+  padding: 10px 14px;
+}
+.card-update.hidden { display: none; }
+.update-body {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.update-body #update-text {
+  font-size: 12px;
+  color: var(--text-dim);
+}
+.btn-update {
+  background: var(--orange);
+  color: #000;
+  border: none;
+  padding: 5px 12px;
+  border-radius: 4px;
+  font-weight: 600;
+  font-size: 11px;
+  cursor: pointer;
+}
+.btn-update.hidden { display: none; }
+
 /* ═══════════════════════════════════════════════════════════
    CONFIG SCREEN
 ═══════════════════════════════════════════════════════════ */

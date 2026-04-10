@@ -10,6 +10,7 @@ const btnToggle           = document.getElementById('btn-toggle');
 const btnConfig           = document.getElementById('btn-config');
 const btnAlertClose       = document.getElementById('btn-alert-close');
 const btnCopy             = document.getElementById('btn-copy');
+const btnHistory          = document.getElementById('btn-history');
 const btnTranscriptToggle = document.getElementById('btn-transcript-toggle');
 const secTranscription    = document.getElementById('sec-transcription');
 
@@ -23,13 +24,26 @@ const alertTitle       = document.getElementById('alert-title');
 const alertBody        = document.getElementById('alert-body');
 const transcriptionArea = document.getElementById('transcription-area');
 const timerEl          = document.getElementById('timer');
+const costEl           = document.getElementById('cost');
 const statusDot        = document.getElementById('status-dot');
 const statusText       = document.getElementById('status-text');
+
+const secError         = document.getElementById('sec-error');
+const errorTitle       = document.getElementById('error-title');
+const errorBody        = document.getElementById('error-body');
+const btnErrorClose    = document.getElementById('btn-error-close');
+
+const secUpdate        = document.getElementById('sec-update');
+const updateText       = document.getElementById('update-text');
+const btnUpdateInstall = document.getElementById('btn-update-install');
 
 // ─── Button handlers ──────────────────────────────────────────────────────────
 btnToggle.addEventListener('click', toggleRecording);
 btnConfig.addEventListener('click', () => window.electronAPI.openConfig());
 btnAlertClose.addEventListener('click', dismissAlert);
+btnErrorClose.addEventListener('click', () => secError.classList.add('hidden'));
+btnHistory.addEventListener('click', () => window.electronAPI.openCallsFolder());
+btnUpdateInstall.addEventListener('click', () => window.electronAPI.installUpdateNow());
 
 btnTranscriptToggle.addEventListener('click', () => {
   secTranscription.classList.toggle('hidden');
@@ -61,6 +75,45 @@ window.electronAPI.onStatusUpdate((status) => {
 
 window.electronAPI.onTimerUpdate((seconds) => {
   timerEl.textContent = formatTime(seconds);
+});
+
+window.electronAPI.onCostUpdate((data) => {
+  if (!data || typeof data.totalUsd !== 'number') return;
+  costEl.textContent = `$${data.totalUsd.toFixed(2)}`;
+  // Warn the user if spend crosses thresholds
+  if (data.totalUsd >= 5) {
+    costEl.classList.add('cost-high');
+  } else if (data.totalUsd >= 2) {
+    costEl.classList.add('cost-warn');
+    costEl.classList.remove('cost-high');
+  } else {
+    costEl.classList.remove('cost-warn', 'cost-high');
+  }
+});
+
+window.electronAPI.onErrorUpdate((data) => {
+  if (!data) return;
+  if (data.clear) {
+    secError.classList.add('hidden');
+    return;
+  }
+  const label = data.source === 'whisper' ? 'OPENAI' : data.source === 'claude' ? 'CLAUDE' : 'ERROR';
+  errorTitle.textContent = `⚠️ ${label}`;
+  errorBody.textContent = data.message || 'Error desconocido';
+  secError.classList.remove('hidden');
+});
+
+window.electronAPI.onUpdateStatus((data) => {
+  if (!data) return;
+  if (data.state === 'available') {
+    updateText.textContent = `Descargando actualización ${data.version || ''}...`;
+    btnUpdateInstall.classList.add('hidden');
+    secUpdate.classList.remove('hidden');
+  } else if (data.state === 'downloaded') {
+    updateText.textContent = `Actualización ${data.version || ''} lista`;
+    btnUpdateInstall.classList.remove('hidden');
+    secUpdate.classList.remove('hidden');
+  }
 });
 
 // ─── Recording control ────────────────────────────────────────────────────────

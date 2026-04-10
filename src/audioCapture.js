@@ -91,8 +91,16 @@ class AudioCapture {
   }
 
   /**
-   * Recursive chunk recording loop for a given stream.
-   * Creates a new MediaRecorder each cycle to produce clean chunks.
+   * Single long-running MediaRecorder with timeslice.
+   *
+   * MediaRecorder.start(timeslice) emits ondataavailable every `timeslice` ms
+   * WITHOUT stopping. This removes the start/stop gap that cut words at the
+   * boundary in the previous implementation.
+   *
+   * Quirk: only the first ondataavailable blob contains the WebM container
+   * headers (EBML + Segment init). Subsequent blobs are cluster-only data and
+   * won't decode standalone. We keep the first blob as `headerBlob` and
+   * prepend it to each subsequent chunk before sending to Whisper.
    */
   _startChunkLoop(stream, onChunk) {
     if (!this.isRecording || !stream.active || !onChunk) return;
@@ -107,37 +115,37 @@ class AudioCapture {
       return;
     }
 
-    const chunks = [];
+    // Holds the init segment (EBML header + tracks) from the first chunk.
+    // All later chunks get this prepended so they form valid, decodable WebM.
+    let headerBlob = null;
 
-    recorder.ondataavailable = (e) => {
-      if (e.data && e.data.size > 0) chunks.push(e.data);
-    };
-
-    recorder.onstop = async () => {
-      if (chunks.length > 0) {
-        try {
-          const blob = new Blob(chunks, { type: mimeType || 'audio/webm' });
-          const arrayBuffer = await blob.arrayBuffer();
-          onChunk(new Uint8Array(arrayBuffer));
-        } catch (err) {
-          console.error('[AudioCapture] Chunk error:', err);
+    recorder.ondataavailable = async (e) => {
+      if (!e.data || e.data.size === 0) return;
+      try {
+        let sendBlob;
+        if (!headerBlob) {
+          // First chunk — contains the WebM init segment. Send as-is and keep it.
+          headerBlob = e.data;
+          sendBlob = e.data;
+        } else {
+          // Continuation chunk — prepend the saved header so Whisper can decode it.
+          sendBlob = new Blob([headerBlob, e.data], { type: mimeType || 'audio/webm' });
         }
-      }
-      // Start next cycle
-      if (this.isRecording && stream.active) {
-        this._startChunkLoop(stream, onChunk);
+        const arrayBuffer = await sendBlob.arrayBuffer();
+        onChunk(new Uint8Array(arrayBuffer));
+      } catch (err) {
+        console.error('[AudioCapture] Chunk emit error:', err);
       }
     };
 
     recorder.onerror = (e) => console.error('[AudioCapture] Recorder error:', e.error);
 
-    recorder.start();
+    // Persist reference so stop() can actually stop it.
+    this._recorders = this._recorders || [];
+    this._recorders.push(recorder);
 
-    const t = setTimeout(() => {
-      if (recorder.state === 'recording') recorder.stop();
-    }, this.CHUNK_DURATION);
-
-    this._activeTimeouts.push(t);
+    // start(timeslice) — one recorder, continuous, fires every CHUNK_DURATION ms.
+    recorder.start(this.CHUNK_DURATION);
   }
 
   stop() {
@@ -145,6 +153,13 @@ class AudioCapture {
 
     this._activeTimeouts.forEach((t) => clearTimeout(t));
     this._activeTimeouts = [];
+
+    if (this._recorders) {
+      this._recorders.forEach((r) => {
+        try { if (r.state === 'recording') r.stop(); } catch {}
+      });
+      this._recorders = [];
+    }
 
     [this.micStream, this.systemStream].forEach((stream) => {
       if (stream) stream.getTracks().forEach((t) => t.stop());

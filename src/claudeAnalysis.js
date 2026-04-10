@@ -6,10 +6,15 @@ const Anthropic = require('@anthropic-ai/sdk');
 
 const MODEL = 'claude-sonnet-4-20250514';
 
+// Pricing (USD per token) — Claude Sonnet 4
+const PRICING = {
+  INPUT_PER_TOKEN: 3 / 1_000_000,
+  OUTPUT_PER_TOKEN: 15 / 1_000_000,
+};
+
 const PROMPT_INTRO_GENERIC = `Eres un asistente de ventas en tiempo real. Ayudas a un closer durante una videollamada de venta dandole sugerencias sobre que decir, en que fase esta y alertas de objeciones.`;
 
-const PROMPT_INTRO_FALLBACK = `Eres el asistente de ventas en tiempo real de un closer de Trainer Way.
-Trainer Way es una mentoria para entrenadores personales online que vende un programa de 4 meses por 3.500 euros.`;
+const PROMPT_INTRO_FALLBACK = `Eres un asistente de ventas en tiempo real. Ayudas a un closer durante una videollamada de venta dandole sugerencias sobre que decir, en que fase esta y alertas de objeciones. No conoces aun los detalles del negocio del closer, asi que haz sugerencias genericas de metodologia de ventas consultivas.`;
 
 const PROMPT_BODY = `Analizas la transcripcion de una videollamada de venta en curso y devuelves unicamente un JSON con este formato exacto, sin texto antes ni despues:
 
@@ -125,7 +130,18 @@ async function analyzeTranscription(transcription, anthropicApiKey, profile, cur
   const jsonMatch = text.match(/\{[\s\S]*\}/);
   if (!jsonMatch) throw new Error('Claude no devolvio JSON valido');
 
-  return JSON.parse(jsonMatch[0]);
+  const analysis = JSON.parse(jsonMatch[0]);
+
+  // Attach usage/cost so the caller can track spend
+  const inputTokens = response.usage?.input_tokens || 0;
+  const outputTokens = response.usage?.output_tokens || 0;
+  analysis._usage = {
+    inputTokens,
+    outputTokens,
+    costUsd: inputTokens * PRICING.INPUT_PER_TOKEN + outputTokens * PRICING.OUTPUT_PER_TOKEN,
+  };
+
+  return analysis;
 }
 
 /**
@@ -156,4 +172,5 @@ module.exports = {
   analyzeTranscription,
   verifyAnthropic,
   SAMPLE_TRANSCRIPTION,
+  PRICING,
 };

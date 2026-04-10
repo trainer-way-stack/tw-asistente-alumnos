@@ -65,6 +65,23 @@
     <div class="alert-body" id="alert-body"></div>
   </section>
 
+  <!-- ── ERROR API ────────────────────────────────────────── -->
+  <section class="card card-error hidden" id="sec-error">
+    <div class="alert-header">
+      <span class="alert-title" id="error-title">❌ ERROR</span>
+      <button class="alert-close" id="btn-error-close" title="Cerrar">✕</button>
+    </div>
+    <div class="alert-body" id="error-body"></div>
+  </section>
+
+  <!-- ── AVISO UPDATE ─────────────────────────────────────── -->
+  <section class="card card-update hidden" id="sec-update">
+    <div class="update-body">
+      <span id="update-text">Actualización disponible</span>
+      <button class="btn-update" id="btn-update-install">Instalar</button>
+    </div>
+  </section>
+
   <!-- ── TRANSCRIPCIÓN (oculta por defecto) ────────────────── -->
   <section class="card card-transcription hidden" id="sec-transcription">
     <div class="card-label">TRANSCRIPCIÓN</div>
@@ -78,12 +95,14 @@
   <!-- ── FOOTER ──────────────────────────────────────────── -->
   <footer class="footer">
     <div class="timer" id="timer">00:00</div>
+    <div class="cost" id="cost" title="Coste estimado de esta llamada">$0.00</div>
     <div class="status-wrap">
       <span class="status-dot paused" id="status-dot"></span>
       <span class="status-text" id="status-text">En pausa</span>
     </div>
     <button class="icon-btn" id="btn-transcript-toggle" title="Mostrar/ocultar transcripción">📝</button>
     <button class="icon-btn" id="btn-copy" title="Copiar transcripción">📋</button>
+    <button class="icon-btn" id="btn-history" title="Ver llamadas guardadas">📁</button>
   </footer>
 
 </div><!-- .panel -->

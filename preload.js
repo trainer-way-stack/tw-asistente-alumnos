@@ -23,6 +23,8 @@ contextBridge.exposeInMainWorld('electronAPI', {
   openConfig: () => ipcRenderer.invoke('open-config'),
   testApis: (config) => ipcRenderer.invoke('test-apis', config),
   testAnalysis: (payload) => ipcRenderer.invoke('test-analysis', payload),
+  openCallsFolder: () => ipcRenderer.invoke('open-calls-folder'),
+  installUpdateNow: () => ipcRenderer.invoke('install-update-now'),
 
   // ── Main → Renderer events ────────────────────────────────────────────────────
   onTranscriptionUpdate: (cb) =>
@@ -33,6 +35,12 @@ contextBridge.exposeInMainWorld('electronAPI', {
     ipcRenderer.on('status-update', (_, status) => cb(status)),
   onTimerUpdate: (cb) =>
     ipcRenderer.on('timer-update', (_, seconds) => cb(seconds)),
+  onCostUpdate: (cb) =>
+    ipcRenderer.on('cost-update', (_, data) => cb(data)),
+  onErrorUpdate: (cb) =>
+    ipcRenderer.on('error-update', (_, data) => cb(data)),
+  onUpdateStatus: (cb) =>
+    ipcRenderer.on('update-status', (_, data) => cb(data)),
 
   removeAllListeners: (channel) => ipcRenderer.removeAllListeners(channel),
 });
