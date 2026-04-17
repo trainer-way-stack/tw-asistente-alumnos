@@ -1,6 +1,6 @@
 {
   "name": "tw-asistente-alumnos",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Asistente de ventas en tiempo real para alumnos de Trainer Way",
   "main": "main.js",
   "scripts": {

@@ -4,7 +4,7 @@
  */
 const Anthropic = require('@anthropic-ai/sdk');
 
-const MODEL = 'claude-sonnet-4-20250514';
+const MODEL = 'claude-sonnet-4-5';
 
 // Pricing (USD per token) — Claude Sonnet 4
 const PRICING = {
