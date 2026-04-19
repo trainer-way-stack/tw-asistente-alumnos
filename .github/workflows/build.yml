@@ -24,7 +24,10 @@ jobs:
       - uses: actions/upload-artifact@v6
         with:
           name: windows-installer
-          path: dist/*.exe
+          path: |
+            dist/*.exe
+            dist/*.exe.blockmap
+            dist/latest.yml
 
   build-mac:
     runs-on: macos-latest
@@ -40,7 +43,10 @@ jobs:
       - uses: actions/upload-artifact@v6
         with:
           name: mac-installer
-          path: dist/*.dmg
+          path: |
+            dist/*.dmg
+            dist/*.dmg.blockmap
+            dist/latest-mac.yml
 
   release:
     needs: [build-windows, build-mac]
@@ -56,5 +62,9 @@ jobs:
         with:
           files: |
             artifacts/windows-installer/*.exe
+            artifacts/windows-installer/*.exe.blockmap
+            artifacts/windows-installer/latest.yml
             artifacts/mac-installer/*.dmg
+            artifacts/mac-installer/*.dmg.blockmap
+            artifacts/mac-installer/latest-mac.yml
           generate_release_notes: true
