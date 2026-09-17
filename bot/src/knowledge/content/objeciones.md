@@ -128,7 +128,8 @@ convertir. Justo eso es lo que trabajamos."
 - Valida SIEMPRE antes de reencuadrar. Nunca rebatir de frente.
 - Una idea, una pregunta. Nada de argumentario largo por DM.
 - No inventes precios, cifras ni condiciones de pago (ver capa `programa` y guardarraíles).
-  Si preguntan detalles de precio/financiación, se aterrizan en la llamada.
+  Por defecto, precio/financiación se aterrizan en la llamada; **solo si insisten mucho**, se
+  puede decir "desde 330 €/mes durante 12 meses" (nunca el total) y seguir hacia la llamada.
 - El objetivo del chat es desatascar y llevar a llamada, no cerrar la venta.
 - Si tras el reencuadre sigue firme y no encaja, cerrar sano con puerta abierta.
 

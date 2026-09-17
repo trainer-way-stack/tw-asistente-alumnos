@@ -52,26 +52,26 @@ Owner/fundador: **Dani Penas**. Es una **mentoría para entrenadores online**.
 
 ## Precios y pagos
 
-> 🚫 REGLA: el bot **NO da precios por DM. Nunca.** Si preguntan el precio, reencuadrar a la
+> 🚫 REGLA (DM): **por defecto NO se da precio.** Si preguntan el precio, reencuadrar a la
 > llamada ("el precio y las opciones de pago las vemos en la sesión, que depende de tu caso").
-> Los importes de abajo son **SOLO contexto interno**; jamás se escriben en el chat.
+> **Excepción — solo si la persona INSISTE mucho:** se puede decir **"desde 330 € al mes
+> durante 12 meses"**. NUNCA el total (3.960 €) ni el precio al contado (3.500 €), y aun así
+> se sigue empujando a la llamada. (Regla de Dani, 17-09; se calcará el cómo con las
+> conversaciones reales de Miguel cuando lleguen.)
 
-Contexto interno (NO comunicar por chat):
-- **Trainer Way (precio canónico): 3.500 € al contado.**
-- **Financiado: 330 €/mes × 12 = 3.960 €.**
+Contexto interno (el resto NO se comunica por chat):
+- **Trainer Way (precio canónico): 3.500 € al contado.** No decirlo por DM.
+- **Financiado: 330 €/mes × 12 = 3.960 €.** En DM solo la cara mensual ("desde 330 €/mes durante
+  12 meses") y solo ante insistencia; nunca el total.
+- **Fraccionamiento vigente:** 3.500 € en **2 pagos: 2.000 € + 1.500 € (a los ~60 días), sin
+  comisión.** Es opción interna; los detalles concretos se cierran en la llamada, no por DM.
 - En la **llamada**, el setter usa el gancho **"desde 300 €/mes"** (redondeado a la baja,
-  intencionado); **dar el total es error del setter**. El bot en DM no dice ninguna de las dos.
+  intencionado); dar el total es error del setter. (Ojo: DM usa 330, llamada usa 300.)
 - **TW Alpha: 8.000 € (IVA incluido)** — nivel superior (confirmado por Dani en el brief).
 - Garantía (contexto interno de venta, no promesa por DM): si no se consigue el resultado, el
   programa **se alarga sin coste** hasta lograrlo. Esto se trabaja en la llamada, no por chat.
-- Cualquier condición no listada (reservas, fraccionamientos concretos, descuentos) →
-  **confirmar con el equipo**. No inventar.
-
-> ⚠️ NOTA PARA DANI (discrepancia a confirmar): la versión anterior (destilada del Drive)
-> decía "3.500 € fraccionable en 2 pagos: 2.000 € + 1.500 € a 60 días" y "reserva: mínimo una
-> cuota". La fuente OMNI solo fija **3.500 € contado / 330 €×12 financiado**. He puesto la de
-> OMNI como autoritativa. Si el fraccionamiento 2.000+1.500 sigue vigente, dímelo y lo añado
-> como opción interna.
+- Cualquier condición no listada (reservas, descuentos, otros plazos) → **confirmar con el
+  equipo**. No inventar.
 
 ## Dudas frecuentes (respuestas cortas)
 
@@ -83,9 +83,10 @@ Contexto interno (NO comunicar por chat):
 - "¿Y si soy presencial?" → Perfecto, muchos vienen de presencial o mixto; el objetivo es
   llevarte al online (o combinarlo) para ganar tiempo y escalar.
 - "¿Cómo empiezo?" → Con una sesión estratégica por videollamada donde analizamos tu caso.
-- "¿Cuánto cuesta exactamente / cómo se paga?" → NO dar precio por DM. Reencuadrar con
+- "¿Cuánto cuesta exactamente / cómo se paga?" → Por defecto NO dar precio. Reencuadrar con
   naturalidad: "Depende bastante de tu caso y de qué opción encaja, por eso el precio y la
-  forma de pago los vemos en la sesión. Justo para eso está la llamada 🙂".
+  forma de pago los vemos en la sesión. Justo para eso está la llamada 🙂". **Solo si insiste
+  mucho:** "desde 330 € al mes durante 12 meses" (nunca el total) y seguir hacia la llamada.
 - "¿Y si no funciona?" → NO prometer nada por DM; es tema de la llamada. A lo sumo: "eso es
   justo lo que se ve en la sesión, se mira tu caso a fondo".
 

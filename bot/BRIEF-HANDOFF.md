@@ -68,7 +68,7 @@ necesidad de conectar Instagram. Con `ANTHROPIC_API_KEY` responde con la metodol
 - ✅ **Follow-up dentro de 24h**: recordatorio suave a las 4h (config) si no responde; se cancela
   si responde.
 - ✅ **Multi-cuenta / reventa**: estado y config por tenant. Corre en la **cuenta de Dani**.
-- ✅ **Guardarraíles**: no promete resultados, no da consejo médico, **no da precios por DM**, no
+- ✅ **Guardarraíles**: no promete resultados, no da consejo médico, **no da precios por DM** (salvo insistencia fuerte → "desde 330 €/mes durante 12 meses", nunca el total), no
   comparte datos bancarios, mensajes cortos.
 
 ---
@@ -96,7 +96,7 @@ Para conectar de verdad (no solo simulador):
 | Cuenta | Corre en la **cuenta de Dani**, no la de Miguel. |
 | Reventa | Multi-cuenta desde el diseño (`tenants.js`). |
 | Aviso de IA | Framing **"a medias"** (asistente + Dani) + **1ª respuesta nativa**. Transparente pero natural. **NO** se oculta el aviso (art. 50; era petición inicial de Dani, descartada por riesgo legal/marca). |
-| Precios | El bot **NO da precios por DM**. Reencuadra a la llamada. Precios solo como contexto interno: **TW 3.500 €**, **TW Alpha 8.000 €** (corregido; antes decía 7.000). |
+| Precios | Por defecto el bot **NO da precio por DM** y reencuadra a la llamada. **Excepción (Dani, 17-09):** si el prospecto **insiste mucho**, puede decir **"desde 330 €/mes durante 12 meses"** — nunca el total ni el contado. Contexto interno: **TW 3.500 € contado / 330 €×12 = 3.960 € financiado / 2 pagos 2.000+1.500 a ~60d**; **TW Alpha 8.000 €**. (El "desde 300 €/mes" es el gancho del setter en la llamada; DM usa 330.) Calcar el cómo con las conversaciones de Miguel. |
 | Interfaz | **GHL como CRM** ahora + **panel propio** más friendly en fase 2. |
 | Scoring | Rúbrica 0-10 con umbral. **PENDIENTE:** Dani quiere usar los **11 puntos** de su "proyecto de Omni" (ver §6). |
 | Fuente del programa | Dani quiere que la info del programa salga de su **carpeta "app/apps"** (en su ordenador), NO del Drive. `programa.md` está marcado **PROVISIONAL** hasta tenerla (ver §6). |
@@ -115,7 +115,7 @@ bancarios.**
 | `captacion.md` | captacion | OK (del "Nuevo script conversaciones en frío" + formación setter + roadmap). Dani lo aprobó. |
 | `objeciones.md` | objeciones | OK (de "Resuelve objeciones" + estrategia del "giro"). |
 | `calificacion.md` | calificacion | ✅ **REHECHO (17-09) desde OMNI**: los 11 puntos reales del setter + 3 marcadores de no-show + señales de alarma de ICP. Scoring 0-10 mapeado a los 11 puntos. |
-| `programa.md` | programa | ✅ **REHECHO (17-09) desde OMNI** (`command-deck-os`: precio canónico + contexto de negocio). Precio canónico 3.500 € contado / 330 €×12 = 3.960 €. Ver nota de discrepancia de financiación (2.000+1.500 del Drive) pendiente de confirmar por Dani. |
+| `programa.md` | programa | ✅ **REHECHO (17-09) desde OMNI** (`command-deck-os`: precio canónico + contexto de negocio). Precio canónico 3.500 € contado / 330 €×12 = 3.960 €; fraccionamiento 2.000+1.500 a ~60d **confirmado vigente** por Dani. Regla de precio en DM actualizada (ver §4). |
 | `agendamiento.md` | agendamiento | OK (de "Imprescindibles setter pre llamada" + roadmap). |
 
 **Mejora de mayor impacto:** añadir **conversaciones reales que convirtieron** como ejemplos

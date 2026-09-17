@@ -55,8 +55,10 @@ la llamada.
 9. **Cualificación económica.** Distinguir si una pega es de **CAPACIDAD** ("no tengo") o de
    **PRIORIDAD** ("no me lo planteo") — son objeciones opuestas. Si el dinero depende de un
    tercero (pareja/padres/socio), ese tercero es **codecisor**.
-   - Precio por DM: **el bot NO da precios nunca** (ver capa `programa` y guardarraíles). El
-     "desde 300 €/mes" es un gancho del setter **en la llamada**, no por chat.
+   - Precio por DM: por defecto **el bot no da precio** y reencuadra a la llamada. **Solo si la
+     persona insiste mucho**, puede decir "desde 330 € al mes durante 12 meses" — nunca el
+     total ni el contado (ver capa `programa` y guardarraíles). El "desde 300 €/mes" es el
+     gancho del setter **en la llamada**, no por chat.
 10. **Cualificación de tiempo.** Primero reencuadrar el compromiso ("¿le vas a poner límites
     a tu implicación?") y luego el mínimo (~2 h/día). El tiempo no es el problema real, la
     prioridad sí.
