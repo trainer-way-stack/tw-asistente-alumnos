@@ -1,52 +1,76 @@
 /**
  * Orquestador: el "cerebro" del setter IA.
  *
- * Por cada mensaje entrante:
- *   1. Comprueba pausa/propietario (¿debe responder el bot?).
- *   2. Recupera de las CAPAS solo lo relevante (RAG).
- *   3. Genera la respuesta con Claude, aplicando el tono de Dani y los guardarraíles.
- *   4. Antepone el aviso de IA la primera vez (art. 50).
- *   5. Envía la(s) respuesta(s) y actualiza el estado.
- *
- * La generación real con Claude está aislada en `generateReply` para poder probar
- * el flujo completo en el simulador sin gastar tokens.
+ * Por cada mensaje entrante (identificado por accountId + senderId):
+ *   1. Cancela cualquier recordatorio pendiente (el prospecto ha respondido).
+ *   2. Comprueba pausa/propietario (¿debe responder el bot?).
+ *   3. Recupera de las CAPAS solo lo relevante (RAG).
+ *   4. Genera respuesta con Claude (nativa en el 1er turno) + score de cualificación.
+ *   5. Aplica el scoring: si supera el umbral del tenant, pasa a proponer llamada.
+ *   6. En el primer turno añade el aviso de IA DESPUÉS de la respuesta nativa.
+ *   7. Envía, registra y programa el follow-up (recordatorio a las N horas de silencio).
  */
 
 const { getConversation, saveConversation, appendMessage } = require('./state');
+const { getTenant } = require('./tenants');
 const { shouldBotRespond } = require('./pause');
 const { maybeDisclosure } = require('./disclosure');
+const { decideFromScore } = require('./scoring');
+const { scheduleFollowup, cancelFollowup } = require('./followup');
 const { retrieve, selectLayers } = require('../knowledge/retriever');
 const { sendSequence } = require('../instagram/client');
-const { generateReply } = require('./llm');
+const { generateReply, generateReminder } = require('./llm');
 
-async function handleIncomingMessage({ senderId, text }) {
-  const convo = getConversation(senderId);
+async function handleIncomingMessage({ accountId, senderId, text }) {
+  const tenant = getTenant(accountId);
+  const convo = getConversation(accountId, senderId);
+
+  cancelFollowup(convo);              // respondió -> no mandamos recordatorio
   appendMessage(convo, 'user', text);
 
   if (!shouldBotRespond(convo)) {
-    // En pausa o lo lleva un humano: registramos y no respondemos.
     saveConversation(convo);
-    console.log(`[orq] ${senderId}: en pausa/humano, no responde.`);
+    console.log(`[orq] ${accountId}/${senderId}: en pausa/humano, no responde.`);
     return;
   }
 
   // 1) Recuperar conocimiento relevante (solo de las capas que tocan).
   const context = await retrieve({ text, stage: convo.stage });
 
-  // 2) Generar respuesta (con tono + guardarraíles). Puede devolver varios mensajes.
-  const { messages, nextStage } = await generateReply({ convo, context });
+  // 2) Generar respuesta + score.
+  const isFirstBotTurn = !convo.messages.some((m) => m.role === 'assistant');
+  const { messages, nextStage, score } = await generateReply({ convo, context, tenant });
 
-  // 3) Aviso de IA la primera vez (claro, una sola vez, al principio).
-  const disclosure = maybeDisclosure(convo);
-  const outgoing = disclosure ? [disclosure, ...messages] : messages;
+  // 3) Scoring de cualificación: decide el siguiente paso.
+  convo.score = score;
+  let stage = nextStage;
+  if (stage === 'calificando') {
+    const decision = decideFromScore(score, tenant);
+    stage = decision.stage; // p.ej. 'cierre' si score >= umbral -> proponer llamada
+  }
 
-  // 4) Enviar + registrar.
+  // 4) Aviso de IA: en el primer turno va DESPUÉS de la respuesta nativa (claro y temprano).
+  const disclosure = maybeDisclosure(convo, tenant);
+  const outgoing = disclosure
+    ? (isFirstBotTurn ? [...messages, disclosure] : [disclosure, ...messages])
+    : messages;
+
+  // 5) Enviar + registrar.
   await sendSequence(senderId, outgoing);
   outgoing.forEach((m) => appendMessage(convo, 'assistant', m));
-  if (nextStage) convo.stage = nextStage;
+  convo.stage = stage;
   saveConversation(convo);
 
-  console.log(`[orq] ${senderId}: respondido (capas: ${selectLayers(convo.stage).join(', ')}).`);
+  // 6) Programar recordatorio si sigue vivo (dentro de la ventana 24h).
+  scheduleFollowup(convo, async (fresh, t) => {
+    const reminder = await generateReminder({ convo: fresh, tenant: t });
+    await sendSequence(fresh.userId, reminder);
+    reminder.forEach((m) => appendMessage(fresh, 'assistant', m));
+    saveConversation(fresh);
+    console.log(`[orq] ${fresh.accountId}/${fresh.userId}: recordatorio enviado.`);
+  });
+
+  console.log(`[orq] ${accountId}/${senderId}: respondido (fase: ${convo.stage}, score: ${convo.score}, capas: ${selectLayers(convo.stage).join(', ')}).`);
   return outgoing;
 }
 

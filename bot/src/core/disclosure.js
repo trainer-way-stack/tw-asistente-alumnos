@@ -1,39 +1,41 @@
 /**
  * Aviso de interacción con IA (art. 50 del AI Act — obligatorio desde 02/08/2026).
  *
- * DECISIÓN DE DISEÑO (ver ARQUITECTURA.md §6):
- * Este módulo envía un aviso CLARO y VISIBLE, UNA sola vez, al principio de la
- * conversación. Está redactado para sonar natural y con seguridad (posicionarlo
- * como un plus: "respuesta al instante"), NO como una disculpa.
+ * FRAMING elegido por Dani: se presenta como conversación gestionada "a medias"
+ * entre el asistente de IA y la persona real (Dani / el dueño de la cuenta), y el
+ * beneficio es la RAPIDEZ/fluidez de respuesta. Es transparente (cumple el art. 50)
+ * pero suena natural y positivo, no a disculpa.
  *
- * Lo que este módulo NO hace, a propósito: NO entierra el aviso en una ráfaga de
- * mensajes para reducir la probabilidad de que se lea. Eso sería un patrón oscuro
- * que incumple el art. 50 (sanciones de hasta 15 M€ / 3% de facturación) y, sobre
- * todo, es un riesgo legal y de marca que heredarían los alumnos a quienes se les
- * pase el producto. La efectividad se gana con un bot bueno y bien posicionado, no
- * ocultando el aviso.
+ * ORDEN (ver orchestrator): en el primer turno el bot responde primero de forma
+ * NATIVA a lo que dijo la persona y a continuación mete el aviso. Sigue siendo
+ * claro y temprano (2º mensaje del primer turno). Lo que NO hacemos: enterrarlo
+ * para que no se lea.
+ *
+ * Multi-cuenta (reventa): el nombre del dueño sale de la config del tenant, así el
+ * mismo código sirve para Dani o para cualquier alumno que revenda el producto.
  */
 
-// Varias redacciones para que no suene siempre igual (se elige una al azar).
+// {owner} se sustituye por el nombre del dueño de la cuenta (tenant).
 const DISCLOSURES = [
-  '¡Hola! 👋 Soy el asistente de Dani, te escribo yo para que tengas respuesta al momento. Cuéntame, ¿en qué andas?',
-  '¡Buenas! Soy el asistente virtual del equipo de Dani 🙌 Así te contesto al instante. Dime, ¿qué te ha llamado la atención?',
-  '¡Hey! Soy el asistente de IA de Dani, encantado. Te ayudo yo para agilizar y si hace falta te paso con el equipo. ¿Qué necesitas?',
+  'Por cierto, te aviso: ahora mismo escribes con el asistente de IA de {owner} 🙂 Esta conversación la llevamos a medias entre {owner} y yo para que tengas respuesta al momento.',
+  'Te comento de paso: soy el asistente de IA de {owner}. Esta charla la gestionamos entre {owner} y yo, así te contesto con la mayor fluidez posible 🙌',
+  'Un apunte rápido y honesto: te responde el asistente de IA de {owner}. La conversación la llevamos a medias {owner} y yo para que no te quedes esperando.',
 ];
 
-function pickDisclosure() {
-  return DISCLOSURES[Math.floor(Math.random() * DISCLOSURES.length)];
+function pickDisclosure(ownerName) {
+  const t = DISCLOSURES[Math.floor(Math.random() * DISCLOSURES.length)];
+  return t.replaceAll('{owner}', ownerName || 'nuestro equipo');
 }
 
 /**
- * Devuelve el texto del aviso si toca enviarlo (aún no se ha enviado en esta
- * conversación), o null si ya se envió. El orquestador lo antepone a la primera
- * respuesta del bot.
+ * Devuelve el texto del aviso si toca (aún no enviado en esta conversación), o null.
+ * @param {object} convo
+ * @param {object} tenant  config del tenant (usa tenant.ownerName)
  */
-function maybeDisclosure(convo) {
+function maybeDisclosure(convo, tenant) {
   if (convo.disclosureSent) return null;
   convo.disclosureSent = true;
-  return pickDisclosure();
+  return pickDisclosure(tenant?.ownerName);
 }
 
 module.exports = { maybeDisclosure };

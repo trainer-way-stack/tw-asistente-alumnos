@@ -70,8 +70,8 @@ app.post('/webhook', async (req, res) => {
         if (!event.message?.text) continue; // de momento solo texto
 
         await handleIncomingMessage({
-          senderId: event.sender.id,
-          recipientId: event.recipient.id,
+          accountId: event.recipient.id, // la cuenta de IG que recibe = el tenant
+          senderId: event.sender.id,     // el prospecto
           text: event.message.text,
           timestamp: event.timestamp,
         });

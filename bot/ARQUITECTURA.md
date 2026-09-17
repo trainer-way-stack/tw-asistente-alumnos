@@ -128,8 +128,33 @@ prospección**. Los fallos típicos de estas herramientas y nuestra respuesta:
 
 ## 4. Interfaz / CRM: ¿Go High Level o algo propio?
 
+> **Decisiones tomadas:** el bot corre en la **cuenta de Dani** (no en la de Miguel). El sistema
+> es **multi-cuenta desde el diseño** para poder revenderlo a alumnos (cada cuenta = un "tenant"
+> con su config: nombre para el aviso, umbral de scoring, horas de follow-up, tono; ver
+> `src/core/tenants.js`). Dani quiere además un **panel propio** más friendly que GHL — se hace en
+> fase 2; abajo explico también qué implica hacerlo dentro de GHL.
+
 **Recomendación: híbrido, apoyándonos en Go High Level (GHL) como CRM + un panel de control
-mínimo propio para lo que GHL no hace bien.**
+propio para lo que GHL no hace bien.**
+
+### ¿Qué implica montarlo en Go High Level?
+GHL **no** ejecuta el bot (la IA y la lógica de capas viven en nuestro servidor). GHL aporta el
+CRM y el calendario. La integración es:
+1. **Contacto + pipeline:** por cada prospecto, nuestro bot crea/actualiza un contacto en GHL vía
+   API y lo mueve por un pipeline con etapas (Nuevo → Cualificando → Propuesta de llamada →
+   Agendado → Descartado). Ver `src/crm/ghl.js`.
+2. **Etiquetas de estado:** `bot-activo`, `pausado`, `derivado-humano`, `agendado`. Cambiar una
+   etiqueta a mano en GHL puede **disparar la pausa** del bot (GHL → webhook → nuestro servidor).
+3. **Automatizaciones (Workflows) de GHL:** sí, se crean workflows, pero para lo periférico:
+   avisar a Miguel cuando un lead pasa a "Propuesta de llamada", enviar recordatorio de la cita,
+   mover etapas. **La conversación en sí NO se gestiona con workflows de GHL** (son rígidos); eso
+   lo lleva nuestro orquestador.
+4. **Calendario:** las llamadas se agendan en el calendario de GHL (link de reserva que el bot
+   comparte, o creando la cita por API).
+
+**Límite de GHL:** el control fino del bot (pausar una conversación concreta, ver por qué
+respondió lo que respondió, ajustar tono/umbral por conversación) es tosco en GHL. Por eso el
+**panel propio** (fase 2).
 
 Razonamiento:
 - **GHL ya te da gratis** (bueno, ya lo pagas): pipeline/CRM visual, contactos, etiquetas,
@@ -188,12 +213,18 @@ relevantes de la(s) capa(s) que toca. Ver `src/knowledge/layers.js` y `src/knowl
   micro-pasos**, no un checklist.
 
 ### Capas extra que te recomiendo añadir
-5. **Calificación / descarte (fit):** aprender a detectar quién NO encaja para no quemar tiempo
-   ni agenda. Igual de importante que captar.
+5. **Calificación / descarte (fit) con SCORING:** el bot puntúa al prospecto de 0 a 10 (interés,
+   situación, encaje con cliente ideal, urgencia). Si supera el **umbral del tenant** (por defecto
+   7) → se le **propone llamada**; si es muy bajo (≤3) → se descarta con tacto; en medio → se sigue
+   cualificando. Así no se quema agenda con quien no encaja. Ver `src/core/scoring.js`.
 6. **Agendamiento:** el momento y la forma exacta de proponer la llamada + integración con el
    calendario (GHL). El "cómo se cierra hacia llamada" merece su propia capa.
-7. **Seguimiento (follow-up):** qué hacer con el que "se enfría" o no responde, respetando la
-   ventana de 24h. Aquí se gana MUCHA conversión que las otras herramientas dejan sobre la mesa.
+7. **Seguimiento (follow-up):** igual que en la API de WhatsApp, solo se puede escribir **dentro
+   de las 24h** desde el último mensaje del prospecto. Dentro de esa ventana, si pasan **N horas
+   (config, por defecto 4) sin respuesta**, el bot manda **un recordatorio suave**; si el prospecto
+   responde, se cancela. Aquí se gana MUCHA conversión que las otras herramientas dejan sobre la
+   mesa. Ver `src/core/followup.js`. (Nota: el scaffold usa `setTimeout`; en producción → job queue
+   durable tipo BullMQ/Redis para que sobreviva a reinicios y escale.)
 8. **Guardarraíles / seguridad:** qué NO puede decir el bot (promesas de resultados, temas
    médicos, precios inventados, información falsa). Capa de límites que se aplica siempre.
 
@@ -231,19 +262,22 @@ que la norma persigue: no es zona gris, es incumplir a propósito, y queda por e
   peor que cualquier caída de conversión por el aviso.
 
 **La buena noticia:** tu miedo real (que el aviso "resta efectividad" e invita a vacilar al bot)
-se resuelve **sin ocultarlo**, con *posicionamiento*:
-- Un **único aviso claro y natural, al principio**, con seguridad y sin pedir perdón:
-  *"¡Hola! Soy el asistente de Dani, te escribo yo para agilizar 🙌 Cuéntame…"*. Presentarlo como
-  un **plus** ("tienes respuesta al instante") en vez de como una disculpa.
-- **Modelo híbrido humano+IA** (que es tu caso): Miguel abre y da la cara; el asistente ayuda a
-  gestionar. Ser transparente de que hay un asistente en el equipo es creíble y normal —muchos
-  referentes lo hacen— y no rompe la relación.
-- **Que el bot sea buenísimo** es lo que evita que la gente lo "pille", no esconder el aviso. Si
-  suena como Miguel y aporta valor, a nadie le importa que sea asistente.
+se resuelve **sin ocultarlo**, con *posicionamiento*. Enfoque acordado con Dani:
+- **Primera respuesta NATIVA.** La conversación se abre en frío ("hola {nombre}") y el prospecto
+  responde ("hola" / "¿qué quieres?"). El bot responde primero a ESO de forma natural (si saluda,
+  saluda; si pregunta qué quieres, "nada raro, quería conectar contigo"). Nada de discurso de
+  venta de entrada.
+- **Aviso justo después, framing "a medias".** En ese mismo primer turno, tras la respuesta
+  nativa, entra el aviso presentado como un **plus de rapidez**:
+  *"Por cierto: ahora mismo escribes con el asistente de IA de Dani. Esta conversación la llevamos
+  a medias entre Dani y yo para que tengas respuesta al momento 🙌"*. Es transparente (cumple el
+  art. 50: claro y temprano) y a la vez suena bien y justifica la fluidez.
+- **Que el bot sea buenísimo** es lo que evita que la gente lo "pille", no esconder el aviso.
 
-Por eso `src/core/disclosure.js` implementa **un aviso claro, una sola vez, bien visible** y con
-varias redacciones para que suene natural. Lo que NO hace —y no haré— es programar la entrega
-para reducir la probabilidad de que se lea.
+`src/core/disclosure.js` implementa el aviso **una sola vez**, con varias redacciones y con el
+nombre del dueño parametrizado por cuenta (para reventa). El orquestador lo coloca DESPUÉS de la
+respuesta nativa en el primer turno. Lo que NO hace —y no haré— es programar la entrega para
+reducir la probabilidad de que se lea.
 
 ---
 
@@ -265,10 +299,17 @@ que cada alumno conecte su IG. (Decisión de negocio aparte.)
 
 ---
 
-## 8. Qué necesito de ti para seguir
-1. **Decisión de interfaz:** ¿arrancamos apoyándonos en GHL (recomendado) o quieres panel propio ya?
-2. **Los datos** del checklist §5 (empieza por las conversaciones exitosas de Miguel).
-3. **Acceso Meta:** confirmar que la cuenta de Miguel es Profesional y está vinculada a una Página
-   de Facebook, y que podemos crear la app de desarrollador.
-4. **Redacción del aviso:** validar el tono del mensaje de presentación (§6).
+## 8. Estado de decisiones
+- ✅ **Cuenta:** corre en la cuenta de **Dani**. Multi-cuenta listo para reventa (`tenants.js`).
+- ✅ **Aviso:** framing "a medias" + primera respuesta nativa (§6).
+- ✅ **Scoring** de cualificación con umbral → propuesta de llamada (§5.5).
+- ✅ **Follow-up** a las 4h dentro de la ventana de 24h (§5.7).
+- ✅ **Interfaz:** GHL como CRM ahora + panel propio en fase 2 (§4).
+
+### Pendiente / lo que necesito
+1. **Datos de entrenamiento** (§5). Ya estoy catalogando tu Drive (WhatsApp, mentorías,
+   conversaciones). Con eso montamos el pipeline de ingesta y la guía de tono.
+2. **Acceso Meta:** confirmar que la cuenta de Dani es Profesional y está vinculada a una Página
+   de Facebook, y crear la app de desarrollador para pedir permisos.
+3. **Afinar el aviso** con ejemplos reales una vez tengamos el tono.
 ```
