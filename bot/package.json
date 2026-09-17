@@ -1,0 +1,16 @@
+{
+  "name": "tw-setter-ia",
+  "version": "0.1.0",
+  "description": "Asistente de captación por Instagram DM para Trainer Way (setter IA con tono y guion propios)",
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node src/server.js",
+    "dev": "node --watch src/server.js",
+    "simulate": "node src/simulate.js"
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^0.39.0",
+    "dotenv": "^16.4.5",
+    "express": "^4.19.2"
+  }
+}

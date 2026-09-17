@@ -1,0 +1,5 @@
+node_modules/
+.env
+# Datos privados de clientes (conversaciones, exports) — nunca al repo.
+data/ingestion/*
+!data/ingestion/README.md
