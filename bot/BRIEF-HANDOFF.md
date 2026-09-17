@@ -114,8 +114,8 @@ bancarios.**
 | `tono.md` | tono (siempre) | Provisional. Mejorar con el **export de WhatsApp** (zip 2,4 GB en Drive). |
 | `captacion.md` | captacion | OK (del "Nuevo script conversaciones en frío" + formación setter + roadmap). Dani lo aprobó. |
 | `objeciones.md` | objeciones | OK (de "Resuelve objeciones" + estrategia del "giro"). |
-| `calificacion.md` | calificacion | Rúbrica 0-10 provisional. **Sustituir por los 11 puntos de Omni.** |
-| `programa.md` | programa | **PROVISIONAL.** Rehacer desde la carpeta "app/apps" de Dani (no Drive). |
+| `calificacion.md` | calificacion | ✅ **REHECHO (17-09) desde OMNI**: los 11 puntos reales del setter + 3 marcadores de no-show + señales de alarma de ICP. Scoring 0-10 mapeado a los 11 puntos. |
+| `programa.md` | programa | ✅ **REHECHO (17-09) desde OMNI** (`command-deck-os`: precio canónico + contexto de negocio). Precio canónico 3.500 € contado / 330 €×12 = 3.960 €. Ver nota de discrepancia de financiación (2.000+1.500 del Drive) pendiente de confirmar por Dani. |
 | `agendamiento.md` | agendamiento | OK (de "Imprescindibles setter pre llamada" + roadmap). |
 
 **Mejora de mayor impacto:** añadir **conversaciones reales que convirtieron** como ejemplos
@@ -134,15 +134,17 @@ Level** para esto (ver §7).
 
 ## 6. BLOQUEOS que necesitan input de Dani (o de Code local)
 
-1. **Carpeta "app/apps" con la info del programa.** Está en el **ordenador de Dani**, no en Drive.
-   La sesión en la nube no puede leerla. → **Code local** (ver `SETUP-CODE-LOCAL.md`) SÍ puede:
-   abrir Claude Code en esa carpeta y **reescribir `programa.md`** desde ahí. Alternativa: subir la
-   carpeta a Google Drive.
-2. **Los "11 puntos" del scoring** (del "proyecto de Omni"). No están en el Drive ni accesibles
-   desde aquí. → Que Dani los pegue o los ponga en la carpeta "app". Con ellos, **reconstruir la
-   rúbrica en `calificacion.md`** y ajustar `scoring.js` si hace falta.
+1. ✅ **RESUELTO (17-09, Code local).** Carpeta autoritativa = `~/Desktop/apps`, y la fuente del
+   programa + los 11 puntos viven en `OMNI-codigo-completo.txt` (dump de `command-deck-os`).
+   `programa.md` reescrito desde ahí. **Pendiente de Dani:** confirmar la discrepancia de
+   financiación (Drive decía 2.000+1.500 a 60 días; OMNI dice 330 €×12).
+2. ✅ **RESUELTO (17-09, Code local).** Los "11 puntos" = la rúbrica del setter en
+   `command-deck-os → src/lib/prompts.ts → setterSystemPrompt` (FASE A diagnóstico 1-5, FASE B
+   anclajes 6-8, FASE C cierre 9-11) + 3 marcadores de no-show + señales de alarma de calidad de
+   lead. `calificacion.md` reconstruido. `scoring.js` NO necesita cambios: solo mapea score→acción
+   con el umbral del tenant; la rúbrica vive en la capa de conocimiento que usa el LLM.
 3. **Export de conversaciones de Go High Level** (en marcha por Dani). Al tenerlo → ingerir como
-   ejemplos few-shot (ver §7).
+   ejemplos few-shot (ver §7). **Sigue pendiente.**
 
 ---
 
@@ -212,10 +214,12 @@ npm start
 ---
 
 ## 10. Próximos pasos priorizados
-1. **(Code local)** Leer la carpeta "app/apps" → **reescribir `programa.md`** desde esa fuente.
-2. **(Dani)** Pegar los **11 puntos de Omni** → **reconstruir `calificacion.md`** + `scoring.js`.
+1. ✅ **HECHO (17-09).** `programa.md` reescrito desde la carpeta autoritativa (`~/Desktop/apps`,
+   OMNI). Falta que Dani confirme la discrepancia de financiación.
+2. ✅ **HECHO (17-09).** `calificacion.md` reconstruido con los 11 puntos de Omni. `scoring.js` sin
+   cambios (a propósito).
 3. **(Dani/Code)** Terminar el **export de GHL** → ingerir conversaciones reales como few-shot
-   (mayor salto de calidad).
+   (mayor salto de calidad). **← siguiente prioridad.**
 4. **(Opcional)** Transcribir los 3 vídeos de "CONVERSACIONES EXITOSAS" y confirmar de quién son.
 5. **(Paralelo, tarda)** Crear la **app de Meta** y pedir permisos de Instagram.
 6. Procesar el **export de WhatsApp** para afinar `tono.md`.

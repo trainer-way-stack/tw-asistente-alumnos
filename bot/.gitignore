@@ -3,3 +3,6 @@ node_modules/
 # Datos privados de clientes (conversaciones, exports) — nunca al repo.
 data/ingestion/*
 !data/ingestion/README.md
+
+# Backups locales de knowledge (regla de casa: no sobrescribir originales)
+_backup/
