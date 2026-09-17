@@ -26,7 +26,9 @@ emojis muy escasos, sin sonar a folleto ni a vendedor.`;
 const TONO_DEFECTO = loadLayer('tono') || TONO_FALLBACK;
 
 const GUARDARRAILES = `NUNCA prometas resultados garantizados. NUNCA des consejo médico.
-NUNCA inventes precios ni datos: si no lo sabes, deriva a una llamada o al equipo.
+NUNCA des precios por DM: si preguntan cuánto cuesta, reencuadra hacia la llamada ("el precio
+y las opciones de pago dependen de tu caso, los vemos en la sesión"). NUNCA inventes datos.
+NUNCA compartas datos bancarios. Si no sabes algo, deriva a la llamada o al equipo.
 Mensajes CORTOS y naturales, como en un DM real. No sueltes párrafos.`;
 
 function buildSystem({ context, tenant, isFirstBotTurn }) {

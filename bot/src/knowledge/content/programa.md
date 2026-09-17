@@ -1,5 +1,9 @@
 # Programa Trainer Way — resumen para resolver dudas prácticas
 
+> ⚠️ PROVISIONAL. Este contenido se destiló del Drive. Dani quiere que la info del programa
+> salga de su carpeta autoritativa ("app/apps", en su escritorio), NO del Drive. En cuanto
+> nos la pase, este archivo se REEMPLAZA con esa fuente. Mientras, sirve de puente.
+
 > Capa `programa`. Para responder dudas concretas del prospecto (qué es, para quién, qué
 > incluye, cómo funciona) de forma breve y natural en el chat. NO es un folleto: se usa
 > para aclarar lo justo y seguir la conversación. No inventar datos.
@@ -47,17 +51,17 @@ Owner/fundador: **Dani Penas**.
 
 ## Precios y pagos
 
-> Solo dar precios si el prospecto los pide directamente y ya hay contexto; el trabajo fino
-> de precio/financiación se hace en la llamada, no por chat. Datos actuales:
+> 🚫 REGLA: el bot NO da precios por DM. Nunca. Si el prospecto pregunta el precio, se
+> reencuadra hacia la llamada ("el precio y las opciones de pago las vemos en la sesión, que
+> depende de tu caso"). Los importes de abajo son SOLO contexto interno para el bot; jamás se
+> escriben en el chat. El trabajo de precio/financiación se hace en la videollamada.
 
+Contexto interno (NO comunicar por chat):
 - **Trainer Way: 3.500 € (IVA incluido).** Fraccionable en 2 pagos: 2.000 € + 1.500 € (a los
   60 días), sin comisión.
-- **TW Alpha: 7.000 € (IVA incluido).** No se puede financiar por encima de 4.000 €; opciones:
-  dos pagos iguales / 4.000 € inicial + 2×1.500 € / 3.000 € inicial + primera cuota de
-  financiación.
+- **TW Alpha: 8.000 € (IVA incluido).**
 - **Reservas:** mínimo una cuota para reservar plaza.
-- Cualquier condición no listada aquí → **confirmar con el equipo**. No inventar descuentos,
-  plazos ni precios.
+- Cualquier condición no listada → **confirmar con el equipo**. No inventar descuentos ni plazos.
 
 ## Dudas frecuentes (respuestas cortas)
 
@@ -69,8 +73,9 @@ Owner/fundador: **Dani Penas**.
 - "¿Y si soy presencial?" → Perfecto, muchos vienen de presencial o mixto; el objetivo es
   llevarte al online (o combinarlo) para ganar tiempo y escalar.
 - "¿Cómo empiezo?" → Con una sesión estratégica por videollamada donde analizamos tu caso.
-- "¿Cuánto cuesta exactamente / cómo se paga?" → Dar el precio solo si insiste y hay
-  contexto; lo demás (financiación a medida) se ve en la llamada.
+- "¿Cuánto cuesta exactamente / cómo se paga?" → NO dar precio por DM. Reencuadrar con
+  naturalidad: "Depende bastante de tu caso y de qué opción encaja, por eso el precio y la
+  forma de pago los vemos en la sesión. Justo para eso está la llamada 🙂".
 
 ---
 
