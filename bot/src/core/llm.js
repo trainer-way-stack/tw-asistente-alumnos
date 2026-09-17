@@ -17,11 +17,13 @@
  */
 
 const MODEL = 'claude-sonnet-4-5';
+const { loadLayer } = require('../knowledge/content');
 
-// La guía de estilo se genera en fase 0 desde WhatsApp + mentorías (capa TONO).
-// Placeholder; en producción se carga por tenant (tenant.tonePromptRef).
-const TONO_DEFECTO = `[GUÍA DE ESTILO — se genera en fase 0 desde WhatsApp + mentorías.
-Cercano, directo, tú a tú, frases cortas, algún emoji con moderación, sin sonar a folleto.]`;
+// Guía de estilo real, destilada de los materiales de Dani (capa TONO).
+// Fallback por si aún no existe el archivo.
+const TONO_FALLBACK = `Cercano, directo, tú a tú, frases cortas, una pregunta por turno,
+emojis muy escasos, sin sonar a folleto ni a vendedor.`;
+const TONO_DEFECTO = loadLayer('tono') || TONO_FALLBACK;
 
 const GUARDARRAILES = `NUNCA prometas resultados garantizados. NUNCA des consejo médico.
 NUNCA inventes precios ni datos: si no lo sabes, deriva a una llamada o al equipo.

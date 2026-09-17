@@ -188,6 +188,12 @@ cada parte**. Esto se hace con **RAG** (Retrieval-Augmented Generation): la base
 se trocea y etiqueta por capa; en cada mensaje el orquestador recupera solo los fragmentos
 relevantes de la(s) capa(s) que toca. Ver `src/knowledge/layers.js` y `src/knowledge/retriever.js`.
 
+> **Estado:** la base de conocimiento YA está poblada (1ª pasada) en
+> `src/knowledge/content/*.md`, destilada de tus documentos reales del Drive (script en frío,
+> formación setter, objeciones, imprescindibles pre-llamada, el proyecto TW). El bot ya responde
+> con tu metodología, no con placeholders. Incluye una **rúbrica de scoring 0-10** real en
+> `calificacion.md`. Falta enriquecerlo con conversaciones reales y el export de WhatsApp (tono).
+
 ### Capa 1 — TONO de Dani
 - **Fuente:** conversaciones de WhatsApp de Dani + transcripciones de mentorías.
 - **Qué se extrae:** *cómo* hablas (muletillas, longitud de frase, emojis o no, formalidad,

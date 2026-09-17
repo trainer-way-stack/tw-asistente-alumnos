@@ -14,6 +14,7 @@
  */
 
 const { LAYERS } = require('./layers');
+const { loadLayer } = require('./content');
 
 /**
  * Decide qué capas consultar según la fase de la conversación.
@@ -36,19 +37,16 @@ function selectLayers(stage) {
  * Recupera fragmentos relevantes de las capas seleccionadas.
  * @returns {Promise<Array<{layer: string, text: string, score: number}>>}
  */
-async function retrieve({ text, stage, k = 4 }) {
+async function retrieve({ text, stage }) {
   const layers = selectLayers(stage);
 
-  // TODO(fase 0): sustituir por búsqueda vectorial real sobre la base de conocimiento.
-  // Ahora mismo devuelve marcadores para que el orquestador funcione en modo simulador.
+  // MVP: inyecta la capa destilada entera (los .md son pequeños). 'tono' lo maneja
+  // el LLM como guía de estilo; 'guardarrailes' va inline en el prompt.
+  // Evolución: búsqueda vectorial para recuperar solo fragmentos cuando la base crezca.
   return layers
     .filter((id) => id !== 'tono' && id !== 'guardarrailes')
-    .slice(0, k)
-    .map((layer) => ({
-      layer,
-      text: `[fragmento de la capa "${layer}" relevante para: "${text}"]`,
-      score: 0.0,
-    }));
+    .map((layer) => ({ layer, text: loadLayer(layer) }))
+    .filter((c) => c.text); // descarta capas aún sin contenido
 }
 
 module.exports = { retrieve, selectLayers };
