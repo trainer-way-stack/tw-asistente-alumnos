@@ -218,8 +218,13 @@ npm start
    OMNI). Falta que Dani confirme la discrepancia de financiación.
 2. ✅ **HECHO (17-09).** `calificacion.md` reconstruido con los 11 puntos de Omni. `scoring.js` sin
    cambios (a propósito).
-3. **(Dani/Code)** Terminar el **export de GHL** → ingerir conversaciones reales como few-shot
-   (mayor salto de calidad). **← siguiente prioridad.**
+3. **(Dani/Code)** Export de GHL → few-shot. **Pipeline HECHO (18-09):** `src/ingestion/parse_export.js`
+   parsea el PDF categorizado, normaliza a SETTER/PROSPECTO, **anonimiza** (nombres/tel/email) y
+   etiqueta outcome. 1ª tanda ingerida (`conversaciones_categorizadas.pdf`): 48 convos → 6 sale,
+   15 reached_call, 2 no_show, 25 no_booking (en `data/ingestion/`, ignorado por git).
+   **PENDIENTE:** más tandas (Dani las está sacando) y luego **destilar few-shot a mano** a
+   `captacion.md`/`objeciones.md`/`tono.md` (sin PII). Criterio: las `no_booking` NO son mala
+   técnica; la voz objetivo es un BLEND (Miguel + WhatsApp Dani + formaciones), no copiar a Miguel.
 4. **(Opcional)** Transcribir los 3 vídeos de "CONVERSACIONES EXITOSAS" y confirmar de quién son.
 5. **(Paralelo, tarda)** Crear la **app de Meta** y pedir permisos de Instagram.
 6. Procesar el **export de WhatsApp** para afinar `tono.md`.

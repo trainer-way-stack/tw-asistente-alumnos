@@ -31,11 +31,33 @@ Aquí se dejan los datos en crudo que alimentan las capas de conocimiento
 ### 6. Objeciones reales  → capa OBJECIONES
 - Lista de objeciones y cómo se resolvieron (puede salir de las conversaciones).
 
-## Cómo se procesa (pipeline de ingesta — se implementa en fase 0)
-1. Normalizar cada fuente a texto limpio con su etiqueta de capa.
-2. Trocear en fragmentos (chunks) manejables.
-3. Generar embeddings y guardarlos en el vector store con metadato `layer`.
-4. Para el TONO: además, generar una **guía de estilo** + ejemplos few-shot.
+## Pipeline de ingesta (IMPLEMENTADO)
 
-> Cuando tengas los datos, súbelos a esta carpeta (o a un Drive y me pasas el
-> acceso) y montamos el pipeline de ingesta.
+Parser del export categorizado de GHL (PDF) → hilos normalizados y anonimizados.
+
+```bash
+# desde bot/
+node src/ingestion/parse_export.js <export.pdf|export.txt> [--out data/ingestion]
+```
+
+Qué hace (`src/ingestion/parse_export.js`, versionado, sin PII):
+1. Extrae el texto del PDF con PDFKit (`src/ingestion/pdftext.swift`, nativo macOS; no necesita poppler).
+2. Parsea categorías → contactos (con tags) → mensajes, mapeando `Trainer Way`→`SETTER`, `Contacto`→`PROSPECTO`.
+3. **Anonimiza**: nombres de contacto/handle → `[NOMBRE]`, teléfonos → `[TEL]`, emails → `[EMAIL]`.
+   (Nombres del equipo —Dani, Miguel, Natasia, Silvia— se conservan: no son PII de cliente.)
+4. Deriva `outcome` por conversación: `sale` (tag nuevo-cliente-tw/cliente), `reached_call`, `no_show`, `no_booking`.
+5. Escribe `normalized/NNN-<outcome>-<categoria>.txt` + `index.json`. **Todo ignorado por git.**
+
+### Salida de la 1ª tanda (`conversaciones_categorizadas.pdf`, 2026-09-18)
+48 conversaciones · 5.206 mensajes reales. Outcome: **6 sale, 15 reached_call, 2 no_show, 25 no_booking**.
+
+> OJO de criterio (Dani, 09-18): las 25 `no_booking` **NO son un dataset negativo de técnica**:
+> son conversaciones bien hechas que se enfriaron por un factor externo. Se usan como buenos
+> ejemplos de oficio; el "por qué se cayeron" se analiza aparte. La **voz objetivo** del bot es
+> un BLEND (estas conversaciones de Miguel + estilo de WhatsApp de Dani + formaciones), no una
+> copia literal de Miguel.
+
+## Siguiente (destilación a few-shot — PENDIENTE, con el corpus completo)
+Curar a mano ~8-12 fragmentos ejemplares por fase (apertura / cualificación / objeción / cierre),
+**sin PII**, y meterlos en `captacion.md`, `objeciones.md`, `tono.md`. Se hace cuando lleguen más
+tandas para que la voz salga del blend y no de una sola muestra.
