@@ -28,8 +28,10 @@ const EQUIPO = ['Dani', 'Miguel', 'Natasia', 'Natasia', 'Silvia', 'Trainer Way']
 
 // ── Regex ──
 const RE_CATEGORY = /^(.+?) \((\d+)\)$/;            // "Llegaron a llamada (21)"
-const RE_TAGLINE = /·\s*(\d+)\s*mensajes reales/;    // línea de tags del contacto
-const RE_MSG = /^(Trainer Way|Contacto) · (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ([A-ZÁÉÍÓÚ]+)\s*$/;
+// Línea de tags del contacto. Formato A (lote 1): "· N mensajes reales". Formato B (lote 2,
+// conversaciones completas): "· N mensajes · fecha → fecha · CANALES".
+const RE_TAGLINE = /·\s*(\d+)\s*mensajes\b/;
+const RE_MSG = /^(Trainer Way|Contacto) · (\d{4}-\d{2}-\d{2} \d{2}:\d{2}) · ([A-ZÁÉÍÓÚ_]+)\s*$/;
 const RE_PHONE = /(\+?\d{1,3}[ .-]?)?(?:\d[ .-]?){8,12}\d/g; // teléfonos (amplio)
 const RE_EMAIL = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/g;
 
@@ -188,16 +190,21 @@ function matchOverride(convo, overrides) {
   });
 }
 
-// Tags de GHL que equivalen a "compró / es cliente".
-const SALE_TAGS = ['nuevo-cliente-tw', 'cliente', 'antiguo cliente'];
+// Tags de GHL que equivalen a "compró / es cliente" (inequívocas).
+// PENDIENTE confirmar con Dani si 'seguimiento clientes' y/o 'clientes contactados' cuentan.
+const SALE_TAGS = [
+  'nuevo-cliente-tw', 'nuevo cliente', 'cliente', 'antiguo cliente', 'tw-elite', 'tw-alpha',
+];
 
 function outcomeOf(convo, overrides) {
   const hit = matchOverride(convo, overrides);
   if (hit) return hit.outcome; // ground truth manda
-  const base = CATEGORY_OUTCOME[convo.category] || 'unknown';
   const tags = convo.tags.map((t) => t.toLowerCase());
-  if (base === 'reached_call' && tags.some((t) => SALE_TAGS.includes(t))) return 'sale';
-  return base;
+  // La venta y el no-show los marca la ETIQUETA (funciona con o sin categoría).
+  if (tags.some((t) => SALE_TAGS.includes(t))) return 'sale';
+  if (tags.includes('no show')) return 'no_show';
+  // Si el export trae categorías (lote 1), refina el resto; si no (lote 2), queda sin clasificar.
+  return CATEGORY_OUTCOME[convo.category] || 'uncategorized';
 }
 
 function main() {
@@ -209,6 +216,7 @@ function main() {
   // sin pisarse. overrides.json se comparte y se lee siempre de la base (outDir).
   const srcTag = slugify(path.basename(input).replace(/\.[^.]+$/, ''));
   const normDir = path.join(outDir, 'normalized', srcTag);
+  fs.rmSync(normDir, { recursive: true, force: true }); // limpiar salida vieja (evita ficheros stale)
   fs.mkdirSync(normDir, { recursive: true });
 
   const { forcing, check } = loadOverrides(outDir);
@@ -232,7 +240,7 @@ function main() {
       viaOverride: hit ? hit.label : '', hasSaleTag, tags: c.tags });
     summary[outcome] = (summary[outcome] || 0) + 1;
     const id = String(i + 1).padStart(3, '0');
-    const fname = `${id}-${outcome}-${slugify(c.category)}.txt`;
+    const fname = `${id}-${outcome}.txt`;
     const setterTurns = c.messages.filter((m) => m.speaker === 'SETTER').length;
     const prospectTurns = c.messages.filter((m) => m.speaker === 'PROSPECTO').length;
 
