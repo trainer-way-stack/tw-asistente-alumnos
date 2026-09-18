@@ -49,7 +49,14 @@ Qué hace (`src/ingestion/parse_export.js`, versionado, sin PII):
 5. Escribe `normalized/NNN-<outcome>-<categoria>.txt` + `index.json`. **Todo ignorado por git.**
 
 ### Salida de la 1ª tanda (`conversaciones_categorizadas.pdf`, 2026-09-18)
-48 conversaciones · 5.206 mensajes reales. Outcome: **6 sale, 15 reached_call, 2 no_show, 25 no_booking**.
+48 conversaciones · 5.206 mensajes reales. Outcome: **7 sale, 14 reached_call, 2 no_show, 25 no_booking**.
+
+### Ground truth de ventas (override)
+Algunas compras NO llevan el tag `nuevo-cliente-tw` en GHL (p. ej. la conv. 021: tag
+`antiguo cliente`). Por eso el resultado de venta se corrige con `data/ingestion/overrides.json`
+(**git-ignored**, contiene nombres reales): `{ "sale": ["Marie González", ...] }`. Casa por
+subconjunto de palabras (nombre+apellido basta; tolera 2º apellido). Dani pasó 8 ventas; 7 están
+en esta tanda, **"Joaquín Escudero" no aparece en este export** (será de otra tanda).
 
 > OJO de criterio (Dani, 09-18): las 25 `no_booking` **NO son un dataset negativo de técnica**:
 > son conversaciones bien hechas que se enfriaron por un factor externo. Se usan como buenos

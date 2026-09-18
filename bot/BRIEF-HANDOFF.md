@@ -220,8 +220,10 @@ npm start
    cambios (a propósito).
 3. **(Dani/Code)** Export de GHL → few-shot. **Pipeline HECHO (18-09):** `src/ingestion/parse_export.js`
    parsea el PDF categorizado, normaliza a SETTER/PROSPECTO, **anonimiza** (nombres/tel/email) y
-   etiqueta outcome. 1ª tanda ingerida (`conversaciones_categorizadas.pdf`): 48 convos → 6 sale,
-   15 reached_call, 2 no_show, 25 no_booking (en `data/ingestion/`, ignorado por git).
+   etiqueta outcome. 1ª tanda ingerida (`conversaciones_categorizadas.pdf`): 48 convos → 7 sale,
+   14 reached_call, 2 no_show, 25 no_booking (en `data/ingestion/`, ignorado por git). Ventas por
+   ground truth de Dani vía `overrides.json` (git-ignored), porque algunas compras no llevan el
+   tag `nuevo-cliente-tw`. "Joaquín Escudero" es venta pero no está en esta tanda.
    **PENDIENTE:** más tandas (Dani las está sacando) y luego **destilar few-shot a mano** a
    `captacion.md`/`objeciones.md`/`tono.md` (sin PII). Criterio: las `no_booking` NO son mala
    técnica; la voz objetivo es un BLEND (Miguel + WhatsApp Dani + formaciones), no copiar a Miguel.

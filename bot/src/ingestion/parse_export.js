@@ -98,14 +98,23 @@ function parse(text) {
       continue;
     }
 
-    // ¿línea de tags? → el contacto es la línea NO vacía anterior
+    // ¿línea de tags? → el nombre es la línea NO vacía anterior que NO parece tags.
+    // Las líneas de tags pueden ocupar varios renglones (muchos tags → wrap). Se reconocen
+    // porque contienen '|'; se recogen hacia atrás hasta dar con la línea del nombre.
     if (RE_TAGLINE.test(trimmed) && !/contactos ·/.test(trimmed)) {
       flushConvo();
+      const tagLines = [trimmed];
       let name = '';
-      for (let j = i - 1; j >= 0; j--) { if (lines[j].trim()) { name = lines[j].trim(); break; } }
+      for (let j = i - 1; j >= 0; j--) {
+        const prev = lines[j].trim();
+        if (!prev) continue;
+        if (RE_MSG.test(prev) || RE_CATEGORY.test(prev)) break;
+        if (prev.includes('|')) { tagLines.unshift(prev); continue; } // renglón de tags
+        name = prev; break; // primera línea sin '|' = nombre
+      }
       const cleanName = name.replace(/[⭐️\s]+$/u, '').trim();
-      const tagPart = trimmed.split('·')[0].trim();
-      const tags = tagPart ? tagPart.split('|').map((s) => s.trim()).filter(Boolean) : [];
+      const tagBlob = tagLines.join(' | ').split('·')[0]; // todo antes del "· N mensajes reales"
+      const tags = tagBlob.split('|').map((s) => s.trim()).filter(Boolean);
       // handle = un token del nombre con punto o sin espacios (p.ej. oscarperez.trainer)
       const handle = /[.\_]/.test(cleanName) && !cleanName.includes(' ') ? cleanName : '';
       cur = { category, name: cleanName, handle, tags, messages: [] };
@@ -127,7 +136,37 @@ function parse(text) {
   return convos;
 }
 
-function outcomeOf(convo) {
+/** Normaliza un nombre para comparar (minúsculas, sin acentos ni ⭐). */
+function normName(s) {
+  return String(s).toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '')
+    .replace(/[^a-z0-9 ]/g, ' ').replace(/\s+/g, ' ').trim();
+}
+
+/**
+ * Ground truth de Dani: ventas confirmadas por nombre (algunas compras no llevan el tag
+ * nuevo-cliente-tw en GHL). Se lee de data/ingestion/overrides.json (GIT-IGNORED, contiene
+ * nombres reales). Formato: { "sale": ["Marie González", ...] }.
+ */
+function loadOverrides(outDir) {
+  try {
+    const raw = JSON.parse(fs.readFileSync(path.join(outDir, 'overrides.json'), 'utf8'));
+    const list = [];
+    for (const [outcome, names] of Object.entries(raw)) {
+      for (const n of names) list.push({ outcome, label: n, words: normName(n).split(' ').filter(Boolean) });
+    }
+    return list;
+  } catch { return []; }
+}
+
+/** Casa por subconjunto de palabras (nombre y apellido presentes basta; tolera 2º apellido). */
+function matchOverride(convoName, overrides) {
+  const words = new Set(normName(convoName).split(' ').filter(Boolean));
+  return overrides.find((o) => o.words.length >= 2 && o.words.every((w) => words.has(w)));
+}
+
+function outcomeOf(convo, overrides) {
+  const hit = matchOverride(convo.name, overrides);
+  if (hit) return hit.outcome; // ground truth manda
   const base = CATEGORY_OUTCOME[convo.category] || 'unknown';
   const tags = convo.tags.map((t) => t.toLowerCase());
   if (base === 'reached_call' && (tags.includes('nuevo-cliente-tw') || tags.includes('cliente'))) return 'sale';
@@ -142,14 +181,18 @@ function main() {
   const normDir = path.join(outDir, 'normalized');
   fs.mkdirSync(normDir, { recursive: true });
 
+  const overrides = loadOverrides(outDir);
   const text = extractText(input);
   const convos = parse(text);
 
   const index = [];
   const summary = {};
+  const matchedOverrides = new Set();
   convos.forEach((c, i) => {
     const anon = makeAnonymizer(c.name, c.handle);
-    const outcome = outcomeOf(c);
+    const outcome = outcomeOf(c, overrides);
+    const hit = matchOverride(c.name, overrides);
+    if (hit) matchedOverrides.add(hit.label);
     summary[outcome] = (summary[outcome] || 0) + 1;
     const id = String(i + 1).padStart(3, '0');
     const fname = `${id}-${outcome}-${slugify(c.category)}.txt`;
@@ -177,6 +220,8 @@ function main() {
 
   console.log(`OK · ${convos.length} conversaciones → ${normDir}`);
   console.log('Resumen por outcome:', summary);
+  const unmatched = overrides.filter((o) => !matchedOverrides.has(o.label)).map((o) => o.label);
+  if (unmatched.length) console.log('⚠️ Overrides SIN casar (no están en este export):', unmatched);
 }
 
 main();
