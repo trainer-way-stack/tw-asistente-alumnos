@@ -111,8 +111,10 @@ function parse(text) {
         const prev = lines[j].trim();
         if (!prev) continue;
         if (RE_MSG.test(prev) || RE_CATEGORY.test(prev)) break;
-        if (prev.includes('|')) { tagLines.unshift(prev); continue; } // renglón de tags
-        name = prev; break; // primera línea sin '|' = nombre
+        // Solo es continuación de tags si TERMINA en '|' (los tags envuelven a la línea de arriba).
+        // Un nombre puede llevar '|' en medio (p.ej. "david sillés | aesthetics fitness"): NO es tag.
+        if (prev.endsWith('|')) { tagLines.unshift(prev); continue; }
+        name = prev; break;
       }
       const cleanName = name.replace(/[⭐️\s]+$/u, '').trim();
       const tagBlob = tagLines.join(' | ').split('·')[0]; // todo antes del "· N mensajes reales"

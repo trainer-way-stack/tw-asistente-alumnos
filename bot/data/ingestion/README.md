@@ -80,18 +80,20 @@ Casa por **subconjunto de palabras** del nombre (nombre+apellido; tolera 2º ape
 Formato B: "conversaciones completas, sin filtrar", **sin categorías** y con línea de tags
 "· N mensajes ·…" (el parser soporta ambos formatos). 30 registros de contacto (algunos son
 registros GHL duplicados del mismo contacto: juanpe ×3, reinaldo ×3, pablo molina ×2, cada
-hilo/canal es un registro). Outcome: **1 sale, 29 uncategorized** (sin categorías, el outcome
-solo sale del tag; los que no son venta/no-show quedan `uncategorized`).
-- Venta (por tag): `genaro álvarez` (`antiguo cliente`).
-- ⚠️ OJO (a confirmar por Dani): `jota fernández díaz` lleva `nuevo cliente` (sin `-tw`) y
-  `entrenadorpersonalsevilla150@gmail.com` lleva `tw-elite` — por la regla de Dani NO cuentan
-  como venta, aunque parecen clientes. Si esos tags deben valer, se añaden a `SALE_TAGS`.
-- 3 registros con **nombre no extraíble** del PDF ("prueba y me cuentas", "Vale", pie de email):
-  la conversación está, solo el nombre no; no afecta al outcome (tag-driven).
+hilo/canal es un registro). Outcome: **7 registros sale (= 5 personas), 23 uncategorized**.
+- Ventas (5 personas): `genaro álvarez` (por tag `antiguo cliente`) + `david sillés`,
+  `jota fernández`, `sergio tejeda`, `reinaldo arreaza` (por override de Dani; reinaldo tiene
+  3 registros GHL → 3 filas sale, misma persona).
+- 2 registros con **nombre no extraíble** del PDF ("prueba y me cuentas", "Vale"): la
+  conversación está, solo el nombre no; no afecta al outcome (tag-driven / override por otros).
 
 ### Tags que cuentan como VENTA (Dani, 09-18)
-**SOLO** `nuevo-cliente-tw` y `antiguo cliente`. (No cuentan: `nuevo cliente` sin `-tw`,
-`tw-elite`, `cliente`, `seguimiento clientes`, `clientes contactados`.)
+**SOLO** `nuevo-cliente-tw` y `antiguo cliente`. (No cuentan por tag: `nuevo cliente` sin `-tw`,
+`tw-elite`, `cliente`, `seguimiento clientes`, `clientes contactados`.) Las ventas cuyo tag no
+está se marcan por nombre en `overrides.json → sale` (ground truth de Dani).
+
+**GOTCHA parser:** un nombre puede llevar `|` (p.ej. `david sillés | aesthetics fitness & health`).
+Solo se trata una línea como continuación de tags si **termina** en `|`.
 
 ## Siguiente (destilación a few-shot — PENDIENTE, con el corpus completo)
 Curar a mano ~8-12 fragmentos ejemplares por fase (apertura / cualificación / objeción / cierre),
