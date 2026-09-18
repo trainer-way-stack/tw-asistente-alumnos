@@ -190,11 +190,9 @@ function matchOverride(convo, overrides) {
   });
 }
 
-// Tags de GHL que equivalen a "compró / es cliente" (inequívocas).
-// PENDIENTE confirmar con Dani si 'seguimiento clientes' y/o 'clientes contactados' cuentan.
-const SALE_TAGS = [
-  'nuevo-cliente-tw', 'nuevo cliente', 'cliente', 'antiguo cliente', 'tw-elite', 'tw-alpha',
-];
+// Tags de GHL que equivalen a "compró". Dani (09-18): SOLO estos dos.
+// (Ojo: 'nuevo cliente' sin -tw y 'tw-elite' NO cuentan por decisión suya; ver README.)
+const SALE_TAGS = ['nuevo-cliente-tw', 'antiguo cliente'];
 
 function outcomeOf(convo, overrides) {
   const hit = matchOverride(convo, overrides);

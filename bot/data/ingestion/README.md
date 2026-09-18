@@ -80,17 +80,18 @@ Casa por **subconjunto de palabras** del nombre (nombre+apellido; tolera 2º ape
 Formato B: "conversaciones completas, sin filtrar", **sin categorías** y con línea de tags
 "· N mensajes ·…" (el parser soporta ambos formatos). 30 registros de contacto (algunos son
 registros GHL duplicados del mismo contacto: juanpe ×3, reinaldo ×3, pablo molina ×2, cada
-hilo/canal es un registro). Outcome: **3 sale, 27 uncategorized** (sin categorías, el outcome
+hilo/canal es un registro). Outcome: **1 sale, 29 uncategorized** (sin categorías, el outcome
 solo sale del tag; los que no son venta/no-show quedan `uncategorized`).
-- Ventas (por tag): `entrenadorpersonalsevilla150@gmail.com moreno` (`tw-elite`),
-  `genaro álvarez` (`antiguo cliente`), `jota fernández díaz` (`nuevo cliente`).
+- Venta (por tag): `genaro álvarez` (`antiguo cliente`).
+- ⚠️ OJO (a confirmar por Dani): `jota fernández díaz` lleva `nuevo cliente` (sin `-tw`) y
+  `entrenadorpersonalsevilla150@gmail.com` lleva `tw-elite` — por la regla de Dani NO cuentan
+  como venta, aunque parecen clientes. Si esos tags deben valer, se añaden a `SALE_TAGS`.
 - 3 registros con **nombre no extraíble** del PDF ("prueba y me cuentas", "Vale", pie de email):
   la conversación está, solo el nombre no; no afecta al outcome (tag-driven).
 
-### Tags que cuentan como VENTA
-`nuevo-cliente-tw`, `nuevo cliente`, `cliente`, `antiguo cliente`, `tw-elite`, `tw-alpha`.
-**PENDIENTE confirmar con Dani:** si `seguimiento clientes` y/o `clientes contactados` también
-cuentan (afectaría, p. ej., a `sergio tejeda`, que tiene `seguimiento clientes`).
+### Tags que cuentan como VENTA (Dani, 09-18)
+**SOLO** `nuevo-cliente-tw` y `antiguo cliente`. (No cuentan: `nuevo cliente` sin `-tw`,
+`tw-elite`, `cliente`, `seguimiento clientes`, `clientes contactados`.)
 
 ## Siguiente (destilación a few-shot — PENDIENTE, con el corpus completo)
 Curar a mano ~8-12 fragmentos ejemplares por fase (apertura / cualificación / objeción / cierre),
