@@ -205,7 +205,10 @@ function main() {
   if (!input) { console.error('Uso: node src/ingestion/parse_export.js <export.pdf|.txt> [--out dir]'); process.exit(1); }
   const outIdx = process.argv.indexOf('--out');
   const outDir = outIdx > -1 ? process.argv[outIdx + 1] : path.join(__dirname, '..', '..', 'data', 'ingestion');
-  const normDir = path.join(outDir, 'normalized');
+  // Cada export escribe en su propio subdirectorio (por nombre de fuente), para acumular tandas
+  // sin pisarse. overrides.json se comparte y se lee siempre de la base (outDir).
+  const srcTag = slugify(path.basename(input).replace(/\.[^.]+$/, ''));
+  const normDir = path.join(outDir, 'normalized', srcTag);
   fs.mkdirSync(normDir, { recursive: true });
 
   const { forcing, check } = loadOverrides(outDir);
@@ -248,14 +251,14 @@ function main() {
       messages: c.messages.length, setterTurns, prospectTurns });
   });
 
-  fs.writeFileSync(path.join(outDir, 'index.json'),
+  fs.writeFileSync(path.join(outDir, `index.${srcTag}.json`),
     JSON.stringify({ generated: new Date().toISOString(), source: path.basename(input),
       total: convos.length, summary, conversations: index }, null, 2), 'utf8');
 
   // Cotejo local (nombres reales; git-ignored) para que Dani verifique.
   const crossLines = crossref.map((r) =>
     `${r.id}  ${r.outcome.padEnd(13)}  ${r.hasSaleTag ? 'tag✓' : 'tag·'}  ${r.viaOverride ? 'ovr✓' : 'ovr·'}  ${r.name}  [${r.tags.join(', ')}]`);
-  fs.writeFileSync(path.join(outDir, 'crossref.txt'),
+  fs.writeFileSync(path.join(outDir, `crossref.${srcTag}.txt`),
     'id  outcome        tag   override  nombre  [tags]\n' + crossLines.join('\n') + '\n', 'utf8');
 
   console.log(`OK · ${convos.length} conversaciones → ${normDir}`);
@@ -275,7 +278,7 @@ function main() {
 
   const unmatched = forcing.filter((o) => !matchedForcing.has(o.label)).map((o) => o.label);
   if (unmatched.length) console.log(`\n⚠️ Ventas confirmadas SIN casar (no están en este export) [${unmatched.length}]:`, unmatched);
-  console.log('\nCotejo completo → data/ingestion/crossref.txt');
+  console.log(`\nCotejo completo → data/ingestion/crossref.${srcTag}.txt`);
 }
 
 main();
