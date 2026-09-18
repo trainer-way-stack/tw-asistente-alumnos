@@ -49,20 +49,26 @@ Qué hace (`src/ingestion/parse_export.js`, versionado, sin PII):
 5. Escribe `normalized/NNN-<outcome>-<categoria>.txt` + `index.json`. **Todo ignorado por git.**
 
 ### Salida de la 1ª tanda (`conversaciones_categorizadas.pdf`, 2026-09-18)
-48 conversaciones · 5.206 mensajes reales. Outcome: **8 sale, 13 reached_call, 2 no_show, 25 no_booking**.
-No-show en el corpus: `022 yadira moreno`, `023 itziar arroyo rodriguez`.
+48 conversaciones · 5.206 mensajes reales. Outcome: **7 sale, 14 reached_call, 2 no_show, 25 no_booking**.
+- Ventas (por **etiqueta**): 001 marie, 002 adrià, 003 ernest, 004 mariangi, 005 david garay,
+  006 manuel (todas `nuevo-cliente-tw`), 021 laia (`antiguo cliente`).
+- No-show: `022 yadira moreno` (tag `no show`), `023 itziar arroyo rodriguez`.
 
-### Ground truth de ventas (override)
-Algunas compras NO llevan tag de cliente en GHL. El resultado de venta se corrige con
-`data/ingestion/overrides.json` (**git-ignored**, nombres/emails reales):
-`{ "sale": ["Marie González", "juampitr@hotmail.com", ...] }`.
-- Casa por **subconjunto de palabras** del nombre (nombre+apellido basta; tolera 2º apellido),
-  o por **email** encontrado en el cuerpo de la conversación.
-- También cuenta como venta el tag `antiguo cliente` (además de `nuevo-cliente-tw` / `cliente`).
-- El run imprime un **cotejo** (`data/ingestion/crossref.txt`, git-ignored) y lista no-shows y
-  ventas rescatadas por override sin tag, para verificación.
-- Dani ha pasado ~33 ventas hasta ahora; en esta tanda casan **8** (incl. `samuel maya`, sin tag).
-  El resto **no está en este export** (llegarán en tandas siguientes).
+### Cómo se decide la VENTA (criterio de Dani, 09-18)
+**La venta la marcan las ETIQUETAS de GHL**, no el hecho de estar en una lista de nombres.
+Cuentan como venta: `nuevo-cliente-tw`, `cliente`, `antiguo cliente`.
+
+`data/ingestion/overrides.json` (**git-ignored**, nombres/emails reales) tiene 2 claves:
+- **`sale`**: ventas que Dani confirma EXPLÍCITAMENTE (fuerzan el outcome aunque a esa conversación
+  le falte el tag — red de seguridad para compras sin etiquetar). En esta tanda los 7 confirmados
+  presentes coinciden con su tag; "Joaquín Escudero" es venta confirmada pero no está en el export.
+- **`check`**: lista a COTEJAR (no fuerza nada; la etiqueta manda). El run informa cuáles están en
+  el corpus y si tienen tag de venta. En esta tanda solo `samuel maya` está presente y **NO** tiene
+  tag de venta → queda como `reached_call`, no venta.
+
+Casa por **subconjunto de palabras** del nombre (nombre+apellido; tolera 2º apellido) o por
+**email** encontrado en el cuerpo. El run escribe el cotejo completo en `data/ingestion/crossref.txt`
+(git-ignored) e imprime ventas, no-shows y el resultado de la lista `check`.
 
 > OJO de criterio (Dani, 09-18): las 25 `no_booking` **NO son un dataset negativo de técnica**:
 > son conversaciones bien hechas que se enfriaron por un factor externo. Se usan como buenos

@@ -147,19 +147,30 @@ function normName(s) {
  * nuevo-cliente-tw en GHL). Se lee de data/ingestion/overrides.json (GIT-IGNORED, contiene
  * nombres reales). Formato: { "sale": ["Marie González", ...] }.
  */
+// Outcomes que un override PUEDE forzar (ground truth explícito de Dani). La clave "check" NO
+// fuerza nada: es una lista de nombres/emails a cotejar e informar (la etiqueta manda).
+const FORCEABLE = new Set(['sale', 'no_show', 'reached_call', 'no_booking']);
+
+function makeEntry(outcome, e) {
+  const emailMatch = String(e).match(RE_EMAIL);
+  return emailMatch
+    ? { outcome, label: e, email: emailMatch[0].toLowerCase() }
+    : { outcome, label: e, words: normName(e).split(' ').filter(Boolean) };
+}
+
 function loadOverrides(outDir) {
   try {
     const raw = JSON.parse(fs.readFileSync(path.join(outDir, 'overrides.json'), 'utf8'));
-    const list = [];
-    for (const [outcome, entries] of Object.entries(raw)) {
+    const forcing = [];
+    const check = [];
+    for (const [key, entries] of Object.entries(raw)) {
       for (const e of entries) {
-        const emailMatch = String(e).match(RE_EMAIL);
-        if (emailMatch) list.push({ outcome, label: e, email: emailMatch[0].toLowerCase() });
-        else list.push({ outcome, label: e, words: normName(e).split(' ').filter(Boolean) });
+        if (FORCEABLE.has(key)) forcing.push(makeEntry(key, e));
+        else if (key === 'check') check.push(makeEntry('check', e));
       }
     }
-    return list;
-  } catch { return []; }
+    return { forcing, check };
+  } catch { return { forcing: [], check: [] }; }
 }
 
 /** Texto crudo (pre-anonimización) de un convo, para casar overrides por email. */
@@ -197,20 +208,23 @@ function main() {
   const normDir = path.join(outDir, 'normalized');
   fs.mkdirSync(normDir, { recursive: true });
 
-  const overrides = loadOverrides(outDir);
+  const { forcing, check } = loadOverrides(outDir);
   const text = extractText(input);
   const convos = parse(text);
 
   const index = [];
   const summary = {};
-  const matchedOverrides = new Set();
+  const matchedForcing = new Set();
+  const checkHits = []; // nombres de la lista "a comprobar" presentes en el corpus
   const crossref = []; // local, con nombres reales (git-ignored) para cotejo de Dani
   convos.forEach((c, i) => {
     const anon = makeAnonymizer(c.name, c.handle);
-    const outcome = outcomeOf(c, overrides);
-    const hit = matchOverride(c, overrides);
-    if (hit) matchedOverrides.add(hit.label);
+    const outcome = outcomeOf(c, forcing);
+    const hit = matchOverride(c, forcing);
+    if (hit) matchedForcing.add(hit.label);
+    const chk = matchOverride(c, check);
     const hasSaleTag = c.tags.map((t) => t.toLowerCase()).some((t) => SALE_TAGS.includes(t));
+    if (chk) checkHits.push({ id: String(i + 1).padStart(3, '0'), name: c.name, label: chk.label, outcome, hasSaleTag, tags: c.tags });
     crossref.push({ id: String(i + 1).padStart(3, '0'), name: c.name, outcome,
       viaOverride: hit ? hit.label : '', hasSaleTag, tags: c.tags });
     summary[outcome] = (summary[outcome] || 0) + 1;
@@ -246,12 +260,21 @@ function main() {
 
   console.log(`OK · ${convos.length} conversaciones → ${normDir}`);
   console.log('Resumen por outcome:', summary);
-  const unmatched = overrides.filter((o) => !matchedOverrides.has(o.label)).map((o) => o.label);
-  if (unmatched.length) console.log(`⚠️ Overrides SIN casar (no están en este export) [${unmatched.length}]:`, unmatched);
+
+  console.log('\nVENTAS (por etiqueta de cliente / venta confirmada):');
+  crossref.filter((r) => r.outcome === 'sale').forEach((r) => console.log(`  ${r.id}  ${r.name}  [${r.tags.join(', ')}]`));
   console.log('\nNO-SHOW en el corpus:');
   crossref.filter((r) => r.outcome === 'no_show').forEach((r) => console.log(`  ${r.id}  ${r.name}  [${r.tags.join(', ')}]`));
-  console.log('\nVENTAS por override SIN tag de venta (rescatadas del ground truth):');
-  crossref.filter((r) => r.outcome === 'sale' && r.viaOverride && !r.hasSaleTag).forEach((r) => console.log(`  ${r.id}  ${r.name}  (override: ${r.viaOverride})`));
+
+  if (check.length) {
+    console.log('\nLista "a comprobar" presente en el corpus (la ETIQUETA manda el outcome):');
+    checkHits.forEach((r) => console.log(`  ${r.id}  ${r.outcome.padEnd(12)} ${r.hasSaleTag ? 'tag-venta✓' : 'sin-tag-venta'}  ${r.name}`));
+    const notHere = check.filter((o) => !checkHits.some((h) => h.label === o.label)).map((o) => o.label);
+    console.log(`  (${check.length - checkHits.length} de la lista NO están en este export)`);
+  }
+
+  const unmatched = forcing.filter((o) => !matchedForcing.has(o.label)).map((o) => o.label);
+  if (unmatched.length) console.log(`\n⚠️ Ventas confirmadas SIN casar (no están en este export) [${unmatched.length}]:`, unmatched);
   console.log('\nCotejo completo → data/ingestion/crossref.txt');
 }
 
