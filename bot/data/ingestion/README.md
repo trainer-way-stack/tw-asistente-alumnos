@@ -49,14 +49,20 @@ Qué hace (`src/ingestion/parse_export.js`, versionado, sin PII):
 5. Escribe `normalized/NNN-<outcome>-<categoria>.txt` + `index.json`. **Todo ignorado por git.**
 
 ### Salida de la 1ª tanda (`conversaciones_categorizadas.pdf`, 2026-09-18)
-48 conversaciones · 5.206 mensajes reales. Outcome: **7 sale, 14 reached_call, 2 no_show, 25 no_booking**.
+48 conversaciones · 5.206 mensajes reales. Outcome: **8 sale, 13 reached_call, 2 no_show, 25 no_booking**.
+No-show en el corpus: `022 yadira moreno`, `023 itziar arroyo rodriguez`.
 
 ### Ground truth de ventas (override)
-Algunas compras NO llevan el tag `nuevo-cliente-tw` en GHL (p. ej. la conv. 021: tag
-`antiguo cliente`). Por eso el resultado de venta se corrige con `data/ingestion/overrides.json`
-(**git-ignored**, contiene nombres reales): `{ "sale": ["Marie González", ...] }`. Casa por
-subconjunto de palabras (nombre+apellido basta; tolera 2º apellido). Dani pasó 8 ventas; 7 están
-en esta tanda, **"Joaquín Escudero" no aparece en este export** (será de otra tanda).
+Algunas compras NO llevan tag de cliente en GHL. El resultado de venta se corrige con
+`data/ingestion/overrides.json` (**git-ignored**, nombres/emails reales):
+`{ "sale": ["Marie González", "juampitr@hotmail.com", ...] }`.
+- Casa por **subconjunto de palabras** del nombre (nombre+apellido basta; tolera 2º apellido),
+  o por **email** encontrado en el cuerpo de la conversación.
+- También cuenta como venta el tag `antiguo cliente` (además de `nuevo-cliente-tw` / `cliente`).
+- El run imprime un **cotejo** (`data/ingestion/crossref.txt`, git-ignored) y lista no-shows y
+  ventas rescatadas por override sin tag, para verificación.
+- Dani ha pasado ~33 ventas hasta ahora; en esta tanda casan **8** (incl. `samuel maya`, sin tag).
+  El resto **no está en este export** (llegarán en tandas siguientes).
 
 > OJO de criterio (Dani, 09-18): las 25 `no_booking` **NO son un dataset negativo de técnica**:
 > son conversaciones bien hechas que se enfriaron por un factor externo. Se usan como buenos

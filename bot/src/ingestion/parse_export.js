@@ -151,25 +151,41 @@ function loadOverrides(outDir) {
   try {
     const raw = JSON.parse(fs.readFileSync(path.join(outDir, 'overrides.json'), 'utf8'));
     const list = [];
-    for (const [outcome, names] of Object.entries(raw)) {
-      for (const n of names) list.push({ outcome, label: n, words: normName(n).split(' ').filter(Boolean) });
+    for (const [outcome, entries] of Object.entries(raw)) {
+      for (const e of entries) {
+        const emailMatch = String(e).match(RE_EMAIL);
+        if (emailMatch) list.push({ outcome, label: e, email: emailMatch[0].toLowerCase() });
+        else list.push({ outcome, label: e, words: normName(e).split(' ').filter(Boolean) });
+      }
     }
     return list;
   } catch { return []; }
 }
 
-/** Casa por subconjunto de palabras (nombre y apellido presentes basta; tolera 2º apellido). */
-function matchOverride(convoName, overrides) {
-  const words = new Set(normName(convoName).split(' ').filter(Boolean));
-  return overrides.find((o) => o.words.length >= 2 && o.words.every((w) => words.has(w)));
+/** Texto crudo (pre-anonimización) de un convo, para casar overrides por email. */
+function rawTextOf(convo) {
+  return (convo.messages || []).map((m) => m.body.join(' ')).join(' ').toLowerCase();
 }
 
+/** Casa por email (en el cuerpo) o por subconjunto de palabras del nombre (nombre+apellido). */
+function matchOverride(convo, overrides) {
+  const words = new Set(normName(convo.name).split(' ').filter(Boolean));
+  let raw = null;
+  return overrides.find((o) => {
+    if (o.email) { if (raw === null) raw = rawTextOf(convo); return raw.includes(o.email); }
+    return o.words.length >= 2 && o.words.every((w) => words.has(w));
+  });
+}
+
+// Tags de GHL que equivalen a "compró / es cliente".
+const SALE_TAGS = ['nuevo-cliente-tw', 'cliente', 'antiguo cliente'];
+
 function outcomeOf(convo, overrides) {
-  const hit = matchOverride(convo.name, overrides);
+  const hit = matchOverride(convo, overrides);
   if (hit) return hit.outcome; // ground truth manda
   const base = CATEGORY_OUTCOME[convo.category] || 'unknown';
   const tags = convo.tags.map((t) => t.toLowerCase());
-  if (base === 'reached_call' && (tags.includes('nuevo-cliente-tw') || tags.includes('cliente'))) return 'sale';
+  if (base === 'reached_call' && tags.some((t) => SALE_TAGS.includes(t))) return 'sale';
   return base;
 }
 
@@ -188,11 +204,15 @@ function main() {
   const index = [];
   const summary = {};
   const matchedOverrides = new Set();
+  const crossref = []; // local, con nombres reales (git-ignored) para cotejo de Dani
   convos.forEach((c, i) => {
     const anon = makeAnonymizer(c.name, c.handle);
     const outcome = outcomeOf(c, overrides);
-    const hit = matchOverride(c.name, overrides);
+    const hit = matchOverride(c, overrides);
     if (hit) matchedOverrides.add(hit.label);
+    const hasSaleTag = c.tags.map((t) => t.toLowerCase()).some((t) => SALE_TAGS.includes(t));
+    crossref.push({ id: String(i + 1).padStart(3, '0'), name: c.name, outcome,
+      viaOverride: hit ? hit.label : '', hasSaleTag, tags: c.tags });
     summary[outcome] = (summary[outcome] || 0) + 1;
     const id = String(i + 1).padStart(3, '0');
     const fname = `${id}-${outcome}-${slugify(c.category)}.txt`;
@@ -218,10 +238,21 @@ function main() {
     JSON.stringify({ generated: new Date().toISOString(), source: path.basename(input),
       total: convos.length, summary, conversations: index }, null, 2), 'utf8');
 
+  // Cotejo local (nombres reales; git-ignored) para que Dani verifique.
+  const crossLines = crossref.map((r) =>
+    `${r.id}  ${r.outcome.padEnd(13)}  ${r.hasSaleTag ? 'tag✓' : 'tag·'}  ${r.viaOverride ? 'ovr✓' : 'ovr·'}  ${r.name}  [${r.tags.join(', ')}]`);
+  fs.writeFileSync(path.join(outDir, 'crossref.txt'),
+    'id  outcome        tag   override  nombre  [tags]\n' + crossLines.join('\n') + '\n', 'utf8');
+
   console.log(`OK · ${convos.length} conversaciones → ${normDir}`);
   console.log('Resumen por outcome:', summary);
   const unmatched = overrides.filter((o) => !matchedOverrides.has(o.label)).map((o) => o.label);
-  if (unmatched.length) console.log('⚠️ Overrides SIN casar (no están en este export):', unmatched);
+  if (unmatched.length) console.log(`⚠️ Overrides SIN casar (no están en este export) [${unmatched.length}]:`, unmatched);
+  console.log('\nNO-SHOW en el corpus:');
+  crossref.filter((r) => r.outcome === 'no_show').forEach((r) => console.log(`  ${r.id}  ${r.name}  [${r.tags.join(', ')}]`));
+  console.log('\nVENTAS por override SIN tag de venta (rescatadas del ground truth):');
+  crossref.filter((r) => r.outcome === 'sale' && r.viaOverride && !r.hasSaleTag).forEach((r) => console.log(`  ${r.id}  ${r.name}  (override: ${r.viaOverride})`));
+  console.log('\nCotejo completo → data/ingestion/crossref.txt');
 }
 
 main();
