@@ -120,9 +120,9 @@ bancarios.**
 
 | Archivo | Capa | Estado |
 |---|---|---|
-| `tono.md` | tono (siempre) | Provisional. Mejorar con el **export de WhatsApp** (zip 2,4 GB en Drive). |
-| `captacion.md` | captacion | OK (del "Nuevo script conversaciones en frío" + formación setter + roadmap). Dani lo aprobó. |
-| `objeciones.md` | objeciones | OK (de "Resuelve objeciones" + estrategia del "giro"). |
+| `tono.md` | tono (siempre) | ✅ **v1 few-shot (19-09)**: calibrado con conversaciones reales que cerraron (emojis reales 💪✅🔥🤝, mensajes de 3-8 palabras, micro-ejemplos reales). Se seguirá afinando con más lotes/WhatsApp. |
+| `captacion.md` | captacion | ✅ **v1 few-shot (19-09)**: + sección "Ejemplos reales del arco" (apertura→cualificación→pitch→filtro→agenda) de las ventas 001-005. |
+| `objeciones.md` | objeciones | ✅ **v1 few-shot (19-09)**: + ejemplos reales (precio, negociar a la baja, codecisor/pareja, "prefiero seguir", "mi caso es especial", "otro mentor"). |
 | `calificacion.md` | calificacion | ✅ **REHECHO (17-09) desde OMNI**: los 11 puntos reales del setter + 3 marcadores de no-show + señales de alarma de ICP. Scoring 0-10 mapeado a los 11 puntos. |
 | `programa.md` | programa | ✅ **REHECHO (17-09) desde OMNI** (`command-deck-os`: precio canónico + contexto de negocio). Precio canónico 3.500 € contado / 330 €×12 = 3.960 €; fraccionamiento 2.000+1.500 a ~60d **confirmado vigente** por Dani. Regla de precio en DM actualizada (ver §4). |
 | `agendamiento.md` | agendamiento | OK (de "Imprescindibles setter pre llamada" + roadmap). |
