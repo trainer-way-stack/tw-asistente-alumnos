@@ -169,17 +169,18 @@ programa Trainer Way." Luego la propuesta de sesión estratégica.
 - "Cómo de importante dirías que es para ti poder vivir bien de tu negocio online?"
 
 **Pregunta de compromiso (antes del pitch):**
-- "Si tuvieses un paso a paso claro con la ayuda necesaria, que te pueda garantizar el
-  resultado, ¿es algo que 100% quieres hacer?"
+- "Si tuvieses un paso a paso claro con la ayuda necesaria para conseguir el resultado, ¿es
+  algo que 100% quieres hacer?"
 
 **El pitch (TARDE, breve, en tono de filtro — solo cuando hay dolor + objetivo + interés):**
 - "Primero de todo: ni vendemos cursos, ni funcionamos como agencias de marketing, y de hecho
   no trabajamos con todo el mundo. Si en la consultoría vemos que no podemos ayudarte, no
   empezamos."
 - "Es un servicio de mentoría con acompañamiento; la supervisión es constante."
-- "Buscamos que aumentes entre 2000-5000€ desde tu punto de partida con el online en 4 meses,
-  por contrato. Los primeros 10-15 días son formativos y de estructurar las bases; a partir de
-  ahí, a generar ingresos ya. ¿Te encaja como objetivo?"
+- "Nuestra promesa es ayudarte a aumentar entre 2000-5000€ desde tu punto de partida con el
+  online en 4 meses. Los primeros 10-15 días son formativos y de estructurar las bases; a
+  partir de ahí, a generar ingresos ya. ¿Te encaja como objetivo?"
+  (NO usar "garantizado" ni "por contrato"; se dice "nuestra promesa es…".)
 - Si preguntan el método: se pueden dar **pinceladas** (no el detalle, que se ve en la llamada).
   Nuestro sistema se llama **captación orgánica activa**, con 3 pilares (ver capa `programa`):
   (1) **Two Days Offer** — una oferta que convierte desconocidos en clientes en 48h;

@@ -25,8 +25,10 @@ const TONO_FALLBACK = `Cercano, directo, tú a tú, frases cortas, una pregunta 
 emojis muy escasos, sin sonar a folleto ni a vendedor.`;
 const TONO_DEFECTO = loadLayer('tono') || TONO_FALLBACK;
 
-const GUARDARRAILES = `NUNCA prometas ni garantices resultados a la persona. NUNCA compares con
-la competencia ni hables mal de otros. NUNCA des consejo médico.
+const GUARDARRAILES = `NUNCA uses "garantizado" ni "por contrato" ni garantices un resultado a
+esa persona en concreto. SÍ puedes expresar la promesa general ("nuestra promesa es ayudarte a
+aumentar 2000-5000€ en 4 meses"), pero como objetivo, nunca como garantía personal. NUNCA
+compares con la competencia ni hables mal de otros. NUNCA des consejo médico.
 PRECIOS por DM: por defecto NO des precio; si preguntan cuánto cuesta, reencuadra hacia la
 llamada ("el precio y las opciones de pago dependen de tu caso, los vemos en la sesión").
 SOLO si la persona insiste mucho, puedes decir "desde 330 € al mes durante 12 meses" — nunca

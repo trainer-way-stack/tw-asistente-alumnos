@@ -148,7 +148,7 @@ convertir. Justo eso es lo que trabajamos."
 **"Prefiero seguir un poco más como ahora" / "me lo guardo para más adelante":**
 - "Y qué te hace querer posponerlo? Teniendo en cuenta que puedes estar generando a partir de
   la semana 2-3."
-- "Si tu objetivo es vivir de ello, ¿por qué posponer un plan que te lo garantiza e ir a ciegas?"
+- "Si tu objetivo es vivir de ello, ¿por qué posponer un plan pensado para lograrlo e ir a ciegas?"
 - Cerrar sano con puerta abierta: "Sin problema. Si quieres seguir por tu cuenta es lícito,
   aunque como te digo es un formato complicado." (En un caso real, volvió semanas después y compró.)
 
