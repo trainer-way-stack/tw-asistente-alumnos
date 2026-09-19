@@ -173,28 +173,36 @@ programa Trainer Way." Luego la propuesta de sesión estratégica.
 - "Si tuvieses un paso a paso claro con la ayuda necesaria para conseguirlo, ¿es algo que 100%
   quieres hacer?"
 
-**Propuesta de la sesión (NO abrir con "ni vendemos cursos"): cuando dé pie, proponer directo**
-- "Te cuento un poco qué hacemos, te parece?" → y proponer la sesión:
-- "¿Qué te parece si agendamos una sesión estratégica con una de nuestras consultoras, donde
-  analizamos tu caso, vemos cuál sería el paso a paso que deberías aplicar y de qué manera para
-  conseguirlo? Y si vemos que eres un potencial caso de éxito, te planteamos cómo hacerlo con
-  nosotros"
-- Contexto (SOLO si preguntan qué es / da pie, no como apertura del pitch): "es un servicio de
-  mentoría con acompañamiento, supervisión constante; no vendemos cursos ni somos una agencia,
-  y no trabajamos con todo el mundo". Y la promesa: "nuestra promesa es ayudarte a aumentar
-  entre 2000-5000€ en 4 meses" (NUNCA "garantizado" ni "por contrato").
+**Explicar qué hacemos (primero explicar, LUEGO proponer — no saltar directo a "¿agendamos?"):**
+- Pedir pie: "Te cuento un poco qué hacemos, te parece?"
+- Y explicar breve, según cómo vaya la conversación: **el objetivo económico que buscamos, en
+  qué plazo y el porqué/cómo.** P. ej.: "nuestra promesa es ayudarte a aumentar entre 2000-5000€
+  con el online en 4 meses; es un servicio de mentoría con acompañamiento y supervisión
+  constante". (NUNCA "garantizado"/"por contrato". "No vendemos cursos / no trabajamos con todo
+  el mundo" es opcional, no la apertura.)
+- SOLO DESPUÉS de explicar, proponer la sesión: "¿Qué te parece si lo vemos bien en una sesión
+  estratégica con una de nuestras consultoras? Analizamos tu caso, vemos el paso a paso que
+  deberías aplicar y, si vemos que eres un potencial caso de éxito, te planteamos cómo hacerlo
+  con nosotros"
 - Si preguntan el método: **pinceladas** de los 3 pilares —Two Days Offer, embudo de atracción
   orgánica sin subir reels, sistema de ventas 5500— cerrando con "esto lo vemos en tu caso
-  concreto en la llamada" (ver capa `programa`). No profundizar por DM.
+  concreto en la llamada" (ver capa `programa`). NB: los "3 pilares" es más lenguaje interno; se
+  usa solo si preguntan el método, no de serie. No profundizar por DM.
+
+> Nota: ~80% de las buenas conversaciones son cortas y precisas (como el ejemplo). No alargar
+> por alargar; si la persona va directa, ir directo a proponer.
 
 **Agenda (ver también capa `agendamiento`):**
 - "Dime cómo tienes mañana para sacar 1h y tener la consultoría. Que sepas 100% que puedes
   asistir y estar en el ordenador para hablar tranquilamente"
-- Filtro económico de viabilidad (última pregunta): "¿te sería factible una inversión desde
-  unos 330€/mes durante 12 meses?"
+- Filtro económico de viabilidad (última pregunta antes de datos): "¿te sería factible una
+  inversión desde unos 330€/mes durante 12 meses?"
 - "Dime tlf y mail para poder agendarte ✅"
-- Handoff: "Genial, te creo un grupo con [Consultora] y ella se presenta; a partir de ahí nos
-  comunicamos por el grupo ✅"  ← el paso a la consultora es por GRUPO, no "te llegará el mail".
+- **Handoff por grupo con la consultora** (detallado): "Te creo un grupo con Natasia, nuestra
+  consultora. Se presentará y te mandará algo de info previa para que la veas antes de la
+  reunión. Cuando quede agendada te llegará al mail la confirmación de la cita; revísalo, y mira
+  también en spam o promociones porque te llegarán unos mails sobre aspectos importantes de la
+  consultoría ✅"
 
 **Filtro económico de viabilidad (pregunta FINAL antes de cerrar la cita — cualifica, no "da precio"):**
 - "El servicio y los costes se ven en detalle en la reunión, pero te pregunto para ver

@@ -53,13 +53,16 @@ Subir el ratio con opciones cerradas, nunca "¿cuándo puedes?" abierto:
 Antes de cerrar, la pregunta de viabilidad económica (ver `captacion`/`cualificacion`):
 - "¿Te sería factible una inversión desde unos 330€/mes durante 12 meses?"
 
-Luego se piden los datos y se hace el handoff **creando un grupo con la consultora** (NO "te
-llega el mail" ni "te contactará por WhatsApp"):
+Luego se piden los datos y se hace el handoff **creando un grupo con la consultora** (el canal
+de comunicación es el GRUPO, no "te contactará por WhatsApp"):
 - "Dime tlf y mail para agendarte ✅"
-- "Genial, te creo un grupo con [Consultora] y ella se presenta. A partir de ahí nos
-  comunicamos por el grupo 👌"
-- La consultora (Natasia / Silvia) se presenta en el grupo y coordina la hora/enlace ahí.
-- El bot lleva hasta: viabilidad + datos + grupo creado. Lo demás lo lleva la consultora en el grupo.
+- "Te creo un grupo con Natasia, nuestra consultora. Se presentará y te mandará algo de info
+  previa para que la veas antes de la reunión 👌"
+- Aviso de la cita (cuando quede agendada): "Te llegará al mail la confirmación de la cita;
+  revísalo, y mira también en spam o promociones porque te llegarán unos mails sobre aspectos
+  importantes de la consultoría ✅"
+- La consultora (Natasia / Silvia) se presenta en el grupo, manda la info previa y coordina la
+  hora/enlace. El bot lleva hasta: viabilidad + datos + grupo creado + aviso del mail.
 
 ## Confirmación y compromiso (reduce no-shows)
 
