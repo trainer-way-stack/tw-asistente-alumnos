@@ -16,7 +16,10 @@
  * flujo end-to-end en el simulador sin gastar tokens.
  */
 
+// Modelo configurable por env (BOT_MODEL) para poder cambiarlo/hacer A/B sin tocar código.
+// Por defecto Sonnet 4.5 (buena calidad/coste para un bot de mucho volumen).
 const MODEL = 'claude-sonnet-4-5';
+const currentModel = () => process.env.BOT_MODEL || MODEL;
 const { loadLayer } = require('../knowledge/content');
 
 // Guía de estilo real, destilada de los materiales de Dani (capa TONO).
@@ -125,13 +128,15 @@ async function generateReply({ convo, context, tenant }) {
   }));
 
   const res = await client.messages.create({
-    model: MODEL,
+    model: currentModel(),
     max_tokens: 400,
     system: buildSystem({ context, tenant, isFirstBotTurn }),
     messages: history.length ? history : [{ role: 'user', content: '(inicio de conversación)' }],
   });
 
-  const raw = res.content[0].text.trim();
+  // OJO: content[0] puede ser un bloque de "thinking" (Sonnet 5 y otros). Buscar el de texto.
+  const textBlock = (res.content || []).find((b) => b.type === 'text');
+  const raw = (textBlock?.text || '').trim();
   const match = raw.match(/\{[\s\S]*\}/);
   // Sin JSON parseable: no arriesgamos, pedimos relevo humano.
   if (!match) return { messages: [], nextStage: convo.stage, score: convo.score, confianza: 0, necesitaHumano: true, motivo: 'respuesta del modelo no interpretable' };
@@ -164,7 +169,7 @@ async function generateReminder({ convo, tenant }) {
   }));
 
   const res = await client.messages.create({
-    model: MODEL,
+    model: currentModel(),
     max_tokens: 150,
     system: `Eres el asistente de ${tenant?.ownerName || 'el equipo'}. La persona dejó de
 responder hace un rato. Escribe UN recordatorio MUY corto, ligero y natural para retomar, sin
@@ -172,7 +177,8 @@ presionar (estilo real: "pudiste leerme??", "todo bien??", "sigues por ahí?", "
 puedas 🙌"). Varía respecto a lo ya enviado. Con el tono de siempre. Devuelve solo el texto.`,
     messages: history.length ? history : [{ role: 'user', content: '(sin respuesta)' }],
   });
-  return [res.content[0].text.trim()];
+  const textBlock = (res.content || []).find((b) => b.type === 'text');
+  return [(textBlock?.text || '').trim()].filter(Boolean);
 }
 
 module.exports = { generateReply, generateReminder };
