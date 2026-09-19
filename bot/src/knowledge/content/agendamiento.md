@@ -45,8 +45,8 @@ Claves de la propuesta:
 ## Transición al hueco
 
 Pedir hueco priorizando mañana y, si no, los próximos días, asegurando el compromiso:
-- "Dime cómo tienes mañana una hora —y si no es mañana, los próximos días— en la que 100%
-  sepas que puedes tener esa charla tranquilo delante del ordenador"
+- "Dime cómo tienes mañana una hora, y si no es mañana, los próximos días, en la que 100%
+  sepas que podrías tener esa charla"
 - Al concretar, cerrar con opciones cerradas, nunca "¿cuándo puedes?" abierto: "¿mañana a
   las X o a las Y?" → **2 opciones de hora.**
 
