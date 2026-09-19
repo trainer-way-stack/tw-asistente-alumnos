@@ -13,8 +13,13 @@
 const DEFAULT = {
   ownerName: 'Dani',           // nombre que aparece en el aviso de IA
   scoreThreshold: 7,           // a partir de aquí se propone llamada (0-10)
-  followupHours: 4,            // horas de silencio antes del recordatorio
-  followupMaxCount: 1,         // cuántos recordatorios como máximo (dentro de la ventana 24h)
+  // Cadencia de follow-up (Dani 09-19): horas de SILENCIO entre cada toque, en orden.
+  // 5h → +5h → +12h → +24h → +24h. Tono ligero ("pudiste leerme??", "todo bien??").
+  // OJO ventana IG 24h: los toques que caen tras >24h de silencio del usuario NO se envían
+  // (fuera de ventana); followup.js los omite solo (haría falta re-engagement por humano).
+  followupScheduleHours: [5, 5, 12, 24, 24],
+  followupHours: 5,            // (compat) primer toque si no hay array
+  followupMaxCount: 5,         // nº máximo de toques de la cadencia
   igAccessTokenEnv: 'IG_ACCESS_TOKEN',
   // tonePromptRef: apunta a la guía de estilo generada en fase 0 (capa TONO)
   tonePromptRef: 'default',

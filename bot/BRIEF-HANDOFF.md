@@ -67,8 +67,15 @@ necesidad de conectar Instagram. Con `ANTHROPIC_API_KEY` responde con la metodol
   aviso ("escribes con el asistente de IA de Dani; lo llevamos a medias Dani y yo…"). Una sola vez.
 - ✅ **Scoring de cualificación 0-10**: al superar el umbral del tenant (por defecto 7) → propone
   llamada; ≤3 → descarta con tacto; en medio → sigue cualificando.
-- ✅ **Follow-up dentro de 24h**: recordatorio suave a las 4h (config) si no responde; se cancela
-  si responde.
+- ✅ **Follow-up con cadencia (v2, 19-09)**: toques por silencio a **5h→+5h→+12h→+24h→+24h**
+  (`followupScheduleHours`), tono muy corto y ligero ("pudiste leerme??"); se reinicia si
+  responde. Los toques >24h quedan fuera de la ventana IG y se omiten solos. Ver capa `seguimiento`.
+- ✅ **Reglas v2 de negocio (19-09, en las capas de conocimiento):** nichos válidos = entrenador/
+  nutri/fisio/psicólogo/dietista/coach (otros → derivar a Miguel); MLM → descartar; ya-cliente →
+  identificarse y parar; compite con otro y le va mal → derivar; "¿estafa?/pruebas" → prueba
+  social del perfil; "¿qué método?" → pinceladas de los 3 pilares (Two Days Offer, embudo
+  orgánico, sistema de ventas 5500) + "se ve en la llamada"; tuteo siempre; **nunca garantías ni
+  comparar con competencia**; filtro económico final = viabilidad 330€/mes ×12.
 - ✅ **Multi-cuenta / reventa**: estado y config por tenant. Corre en la **cuenta de Dani**.
 - ✅ **Escalado a humano (18-09)**: si sale algo NUEVO/fuera de guion, sensible (legal, reembolso,
   salud, datos bancarios, queja) o el modelo duda (confianza baja), el bot **se pausa, manda un

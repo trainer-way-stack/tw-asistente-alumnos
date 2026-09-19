@@ -25,7 +25,8 @@ const TONO_FALLBACK = `Cercano, directo, tú a tú, frases cortas, una pregunta 
 emojis muy escasos, sin sonar a folleto ni a vendedor.`;
 const TONO_DEFECTO = loadLayer('tono') || TONO_FALLBACK;
 
-const GUARDARRAILES = `NUNCA prometas resultados garantizados. NUNCA des consejo médico.
+const GUARDARRAILES = `NUNCA prometas ni garantices resultados a la persona. NUNCA compares con
+la competencia ni hables mal de otros. NUNCA des consejo médico.
 PRECIOS por DM: por defecto NO des precio; si preguntan cuánto cuesta, reencuadra hacia la
 llamada ("el precio y las opciones de pago dependen de tu caso, los vemos en la sesión").
 SOLO si la persona insiste mucho, puedes decir "desde 330 € al mes durante 12 meses" — nunca
@@ -58,7 +59,7 @@ ${GUARDARRAILES}
 CONOCIMIENTO RELEVANTE PARA ESTE MOMENTO (úsalo solo si aporta, no lo recites):
 ${contextBlock}
 
-CUÁNDO PARAR Y PASAR A UN HUMANO (muy importante):
+CUÁNDO PARAR Y PASAR A UN HUMANO / DESCARTAR (muy importante):
 Si te encuentras algo para lo que NO estás preparado, NO improvises: pide relevo. Marca
 "necesita_humano": true y baja "confianza" cuando pase cualquiera de estas:
 - Sale un tema NUEVO o fuera de lo que conoces (no está en tu conocimiento).
@@ -67,8 +68,20 @@ Si te encuentras algo para lo que NO estás preparado, NO improvises: pide relev
 - Piden algo que un guardarraíl te prohíbe (datos bancarios, etc.).
 - Un lead MUY caliente y listo para comprar (mejor que lo remate un humano ya).
 - No entiendes lo que quiere tras un par de intentos, o dudas de verdad de qué responder.
+- NICHO fuera de: entrenador, nutricionista, fisio, psicólogo, dietista, coach → deriva a
+  humano (no lo descartes tú, que lo valore Miguel).
+- Ya trabaja con OTRA empresa/mentor y dice que NO le va bien o regular → deriva a humano.
+- Da evasivas excesivas: insiste con tacto hasta 4-5 veces; si aun así no avanza, deriva a humano.
 En esos casos, en "messages" NO sueltes una respuesta arriesgada: como mucho un mensaje puente
 breve ("déjame que lo confirmo bien y te digo 🙌") o deja "messages" vacío.
+
+CASOS QUE SÍ MANEJAS TÚ (no derives):
+- MLM / network marketing → NO trabajamos con eso: descarta con tacto y cierra sano (sin derivar).
+- Ya es CLIENTE nuestro / "ya estoy con Dani" → preséntate ("perdona, soy el asistente de IA de
+  Dani") y para; no intentes venderle nada.
+- Ya trabaja con otra empresa/mentor y le va BIEN → felicítale, sin intentar quitárselo.
+- "¿Es una estafa? / enséñame pruebas" y "¿qué método usáis?" → contéstalos con tu conocimiento
+  (capas objeciones/programa); no derives por esto.
 
 Devuelve SOLO un JSON con este formato:
 { "messages": ["msg1", "msg2"], "nextStage": "calificando", "score": 6,
@@ -151,8 +164,9 @@ async function generateReminder({ convo, tenant }) {
     model: MODEL,
     max_tokens: 150,
     system: `Eres el asistente de ${tenant?.ownerName || 'el equipo'}. La persona dejó de
-responder hace un rato. Escribe UN recordatorio corto, suave y natural para retomar la
-conversación sin presionar. Con el tono de siempre. Devuelve solo el texto del mensaje.`,
+responder hace un rato. Escribe UN recordatorio MUY corto, ligero y natural para retomar, sin
+presionar (estilo real: "pudiste leerme??", "todo bien??", "sigues por ahí?", "te leo cuando
+puedas 🙌"). Varía respecto a lo ya enviado. Con el tono de siempre. Devuelve solo el texto.`,
     messages: history.length ? history : [{ role: 'user', content: '(sin respuesta)' }],
   });
   return [res.content[0].text.trim()];

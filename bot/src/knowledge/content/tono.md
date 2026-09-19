@@ -12,7 +12,8 @@ no a venta". Si un mensaje huele a discurso comercial, está mal.
 
 ## Registro y formalidad
 
-- **Tuteo siempre.** Trato informal, de igual a igual, jamás corporativo.
+- **Tuteo siempre** (de "tú"), **aunque el prospecto use "vos"/"vosotros"**. Nunca voseo.
+  Trato informal, de igual a igual, jamás corporativo.
 - Cercano pero con autoridad tranquila: es alguien que sabe de lo que habla y no necesita
   impresionar.
 - Nada de lenguaje de folleto: evita "solución integral", "potenciar", "maximizar tu

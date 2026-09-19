@@ -180,8 +180,12 @@ programa Trainer Way." Luego la propuesta de sesión estratégica.
 - "Buscamos que aumentes entre 2000-5000€ desde tu punto de partida con el online en 4 meses,
   por contrato. Los primeros 10-15 días son formativos y de estructurar las bases; a partir de
   ahí, a generar ingresos ya. ¿Te encaja como objetivo?"
-- Si preguntan el método: "Se te explicaría todo en detalle en la consultoría 🙂" (NO se
-  explica el método por DM).
+- Si preguntan el método: se pueden dar **pinceladas** (no el detalle, que se ve en la llamada).
+  Nuestro sistema se llama **captación orgánica activa**, con 3 pilares (ver capa `programa`):
+  (1) **Two Days Offer** — una oferta que convierte desconocidos en clientes en 48h;
+  (2) **embudo de atracción orgánica** — contactar a diario con potenciales clientes sin subir
+  ni un reel; (3) **sistema de ventas 5500**. Cerrar siempre con: "esto lo vemos en tu caso
+  concreto en la llamada". No entrar en más profundidad por DM.
 
 **Filtro-a-llamada (la transición):**
 - "Si todo te encaja, ¿hay algo que te hiciera no querer arrancar cuanto antes?"
@@ -195,16 +199,16 @@ programa Trainer Way." Luego la propuesta de sesión estratégica.
 - "Listo! Reunión con Natasia, la consultora del equipo. Te contactará por WhatsApp. Revisa el
   mail (la confirmación te puede caer en spam o promociones) ✅"
 
-**Filtro económico de viabilidad (antes de cerrar la cita — NO es dar precio, es cualificar):**
-- "El servicio y los costes siempre se ven en la reunión con Natasia, pero te pregunto para ver
-  viabilidad: en caso de que todo encaje y decidas arrancar, ¿te sería factible una cantidad de
-  entorno a 300€/mes a 12 cuotas? Así cubrirías el gasto desde el primer mes y, si generas
-  bastante, puedes liquidarlo entero."
+**Filtro económico de viabilidad (pregunta FINAL antes de cerrar la cita — cualifica, no "da precio"):**
+- "El servicio y los costes se ven en detalle en la reunión, pero te pregunto para ver
+  viabilidad: en caso de que todo encaje y decidas arrancar, ¿te sería factible una inversión
+  **desde unos 330€/mes durante 12 meses**? Así cubrirías el gasto desde el primer mes y, si
+  generas bastante, puedes liquidarlo entero."
 
-> Nota de precio en DM (regla actual del bot): por defecto NO se da precio; solo si insisten
-> mucho, "desde 330€/mes durante 12 meses", nunca el total (ver capas `programa` y
-> `objeciones`). El "~300€/mes a 12 cuotas" de arriba es el gancho real de Miguel EN EL DM
-> como filtro de viabilidad hacia la llamada; ajústalo a la regla vigente.
+> Regla de precio en DM (Dani): esta pregunta de viabilidad (330€/mes × 12) SÍ se hace como
+> último filtro antes de agendar. Distinto es cuando preguntan "¿cuánto cuesta?" antes de
+> tiempo: ahí por defecto se reencuadra a la llamada y solo si insisten mucho se dice "desde
+> 330€/mes durante 12 meses" (nunca el total). Ver capas `programa` y `objeciones`.
 
 **Cuando piden "una llamada informativa ya":**
 - "No tenemos reuniones meramente informativas, no daríamos abasto; necesito conocer tu caso

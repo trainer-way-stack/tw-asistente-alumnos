@@ -30,17 +30,21 @@ function withinWindow(convo) {
 function scheduleFollowup(convo, sendReminder) {
   cancelFollowup(convo); // nunca dos a la vez
   const tenant = getTenant(convo.accountId);
-  if (convo.followupCount >= tenant.followupMaxCount) return;
+  const schedule = tenant.followupScheduleHours || [tenant.followupHours || 4];
+  const idx = convo.followupCount || 0;
+  if (idx >= schedule.length) return; // cadencia agotada
 
-  const delayMs = tenant.followupHours * 60 * 60 * 1000;
+  const delayMs = schedule[idx] * 60 * 60 * 1000;
   const handle = setTimeout(async () => {
     const fresh = getConversation(convo.accountId, convo.userId);
     // Solo si sigue dentro de la ventana, no está en pausa/humano y no llegó respuesta.
     if (!withinWindow(fresh) || fresh.paused || fresh.owner === 'humano') return;
-    fresh.followupCount += 1;
+    fresh.followupCount = (fresh.followupCount || 0) + 1;
     fresh.followupHandle = null;
     saveConversation(fresh);
     try { await sendReminder(fresh, tenant); } catch (e) { console.error('[followup] error:', e); }
+    // Re-arma el SIGUIENTE toque de la cadencia (si queda y sigue en ventana).
+    scheduleFollowup(getConversation(fresh.accountId, fresh.userId), sendReminder);
   }, delayMs);
 
   if (typeof handle.unref === 'function') handle.unref();

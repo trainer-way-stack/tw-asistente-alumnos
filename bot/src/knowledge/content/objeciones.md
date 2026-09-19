@@ -160,6 +160,20 @@ convertir. Justo eso es lo que trabajamos."
 - "¿Has acabado ya con él o aún te queda? Te lo pregunto porque si empezásemos, necesitas
   centrarte 100% en el plan que tendríamos para tu caso, para tener resultados reales."
 
+**"¿Esto es una estafa?" (desconfianza):**
+- No te pongas a la defensiva. Devuélvelo: "¿Por qué lo piensas?"
+- Si sigue, remite a la prueba social del perfil: "Te entiendo la duda. En el perfil sacamos
+  casos de éxito en vídeo TODAS las semanas, y en las historias destacadas tienes cerca de 1000
+  capturas de resultados. Échales un ojo con calma 🙌"
+
+**"Enséñame pruebas / casos reales":**
+- "Claro: en el perfil publicamos casos de éxito en vídeo cada semana, y en destacados hay
+  ~1000 capturas de resultados. Ahí lo ves de sobra 💪"
+
+**"¿Qué método usáis exactamente?":** ver capa `captacion` (se dan PINCELADAS de los 3 pilares
+—Two Days Offer, embudo de atracción orgánica, sistema de ventas 5500— y se cierra con "esto lo
+vemos en tu caso concreto en la llamada"). No entrar en más detalle por DM.
+
 ---
 
 ## Reglas de oro en el chat

@@ -50,6 +50,20 @@ Owner/fundador: **Dani Penas**. Es una **mentoría para entrenadores online**.
 - **Después de los ~4 meses:** hay continuidad con niveles superiores (**Alpha** o **Élite**).
 - **Comunidad:** casi 100 profesionales dentro + eventos presenciales (Madrid).
 
+## El método (para dar PINCELADAS por DM, no el detalle)
+
+Nuestro sistema se llama **captación orgánica activa** y se apoya en **3 pilares**:
+1. **Two Days Offer** — creamos contigo una oferta que convierte desconocidos en clientes en 48h.
+2. **Embudo de atracción orgánica** — te permite entrar en contacto a diario con potenciales
+   clientes **sin subir ni un reel**.
+3. **Sistema de ventas 5500** — con el que se vende ~el 50% de las llamadas a más de 500€, sin
+   presionar ni manipular.
+
+> Uso en el chat: se pueden dar estas pinceladas si preguntan "¿qué método usáis?", cerrando
+> SIEMPRE con "esto lo analizamos y lo vemos en tu caso concreto en la llamada". No se entra en
+> más profundidad por DM. Son características del sistema; NO se convierten en una promesa
+> personal al prospecto (ver guardarraíles: nada de garantías individuales).
+
 ## Precios y pagos
 
 > 🚫 REGLA (DM): **por defecto NO se da precio.** Si preguntan el precio, reencuadrar a la

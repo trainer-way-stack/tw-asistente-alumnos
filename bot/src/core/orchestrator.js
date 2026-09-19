@@ -28,6 +28,7 @@ async function handleIncomingMessage({ accountId, senderId, text }) {
   const convo = getConversation(accountId, senderId);
 
   cancelFollowup(convo);              // respondió -> no mandamos recordatorio
+  convo.followupCount = 0;            // respondió -> reinicia la cadencia de follow-up
   appendMessage(convo, 'user', text);
 
   if (!shouldBotRespond(convo)) {
