@@ -9,7 +9,7 @@
     "simulate": "node src/simulate.js"
   },
   "dependencies": {
-    "@anthropic-ai/sdk": "^0.39.0",
+    "@anthropic-ai/sdk": "^0.127.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2"
   }
