@@ -12,7 +12,7 @@
  * (la conversación ya queda pausada, que es lo crítico).
  */
 
-const { upsertContact } = require('../crm/ghl');
+const { upsertContactByIg } = require('../crm/ghl');
 
 async function notifyHuman({ tenant, convo, reason }) {
   const channel = tenant?.escalationChannel || 'ghl';
@@ -26,9 +26,11 @@ async function notifyHuman({ tenant, convo, reason }) {
     }
 
     if (channel === 'ghl') {
-      const res = await upsertContact({ igUserId: convo.userId, name: convo.name, tag });
-      console.log(`[notify] GHL tag '${tag}' → ${label} — motivo: ${reason}${res?.simulated ? ' (simulado: sin GHL_API_KEY)' : ''}`);
-      return { ok: true, channel, tag };
+      const res = await upsertContactByIg({ igUserId: convo.userId, name: convo.name, tag, motivo: reason });
+      if (res?.simulated) console.log(`[notify] GHL tag '${tag}' → ${label} — motivo: ${reason} (simulado: sin GHL_API_KEY)`);
+      else if (res?.skipped) console.warn(`[notify] GHL NO etiquetado (${label}): ${res.reason} — el humano igualmente tiene la conversación en pausa.`);
+      else console.log(`[notify] GHL tag '${tag}' (${res.mapped}) → contacto ${res.contactId} — motivo: ${reason}`);
+      return { ok: !res?.skipped, channel, tag, ...res };
     }
 
     console.warn(`[notify] canal '${channel}' no implementado; escalado ${label} sin aviso.`);
