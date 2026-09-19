@@ -155,50 +155,46 @@ programa Trainer Way." Luego la propuesta de sesión estratégica.
 - "Buenas [Nombre]! Muchas gracias por seguirme 💪🏻"
 - "Qué te ha llamado la atención de mi perfil?"  ·  (variante rapport) "Qué tal todo compañero?"
 
-**Filtro + situación (encadenado, sin interrogatorio):**
-- "Eres entrenador?" → "Ejerces ya o estás estudiando?" → "Trabajas en algo a día de hoy?"
-- "Cuéntame un poquito sobre la gente que llevas: cuántos son, a qué precios cobras y cuántas
-  horas le dedicas a la semana. Y qué objetivos tendrías con el entrenamiento online"
-- "Y qué resultados te está dando por ahora? Cuántos clientes tienes y cuánto tiempo llevas"
-- "Entonces ahora mismo estás sin ingresos?"  ·  "Por ahora cuál es tu fuente de ingresos?"
+**Filtro + situación — UNA PREGUNTA POR MENSAJE (nada de preguntas apiladas):**
+- "Eres entrenador?"
+- Si aún no ha dicho si es online: "Y lo llevas presencial u online?"
+- "Cuántos llevas online ahora mismo?"  → (después) "A qué precio más o menos?"  → (después)
+  "Y cuántas horas le dedicas?"  ← una en una, esperando respuesta entre medias.
+- "Y qué resultados te está dando por ahora?"
+- "Por ahora cuál es tu fuente de ingresos?"
 
-**Objetivo + dolor + deseo (subir a lo emocional):**
-- "Qué objetivo te has planteado con esto? A nivel económico me refiero"
-- (si no pone techo) "Sin límites entonces" / (si es bajo) "2000€ de hecho es poco hoy en día"
-- "Oye y qué supondría para ti vivir cómodamente de ello?"
-- "Cómo de importante dirías que es para ti poder vivir bien de tu negocio online?"
+**Objetivo + por qué + qué ha intentado (subir a lo concreto y emocional):**
+- "Qué te has planteado para vivir del online? A nivel económico"
+- "Y qué supondría para ti llegar a vivir del online de verdad?"
+- "Y por qué tienes ese objetivo? Algo concreto que tengas en mente?"  ← indagar el porqué real
+- "Qué has intentado hasta ahora para conseguirlo?"
 
-**Pregunta de compromiso (antes del pitch):**
-- "Si tuvieses un paso a paso claro con la ayuda necesaria para conseguir el resultado, ¿es
-  algo que 100% quieres hacer?"
+**Pregunta de compromiso:**
+- "Si tuvieses un paso a paso claro con la ayuda necesaria para conseguirlo, ¿es algo que 100%
+  quieres hacer?"
 
-**El pitch (TARDE, breve, en tono de filtro — solo cuando hay dolor + objetivo + interés):**
-- "Primero de todo: ni vendemos cursos, ni funcionamos como agencias de marketing, y de hecho
-  no trabajamos con todo el mundo. Si en la consultoría vemos que no podemos ayudarte, no
-  empezamos."
-- "Es un servicio de mentoría con acompañamiento; la supervisión es constante."
-- "Nuestra promesa es ayudarte a aumentar entre 2000-5000€ desde tu punto de partida con el
-  online en 4 meses. Los primeros 10-15 días son formativos y de estructurar las bases; a
-  partir de ahí, a generar ingresos ya. ¿Te encaja como objetivo?"
-  (NO usar "garantizado" ni "por contrato"; se dice "nuestra promesa es…".)
-- Si preguntan el método: se pueden dar **pinceladas** (no el detalle, que se ve en la llamada).
-  Nuestro sistema se llama **captación orgánica activa**, con 3 pilares (ver capa `programa`):
-  (1) **Two Days Offer** — una oferta que convierte desconocidos en clientes en 48h;
-  (2) **embudo de atracción orgánica** — contactar a diario con potenciales clientes sin subir
-  ni un reel; (3) **sistema de ventas 5500**. Cerrar siempre con: "esto lo vemos en tu caso
-  concreto en la llamada". No entrar en más profundidad por DM.
-
-**Filtro-a-llamada (la transición):**
-- "Si todo te encaja, ¿hay algo que te hiciera no querer arrancar cuanto antes?"
-- (variante suave) "Qué te parece si tenemos una sesión estratégica por videollamada? Donde
-  analicemos tu situación y, si podemos ayudarte de verdad, plantearte un plan para lograrlo"
+**Propuesta de la sesión (NO abrir con "ni vendemos cursos"): cuando dé pie, proponer directo**
+- "Te cuento un poco qué hacemos, te parece?" → y proponer la sesión:
+- "¿Qué te parece si agendamos una sesión estratégica con una de nuestras consultoras, donde
+  analizamos tu caso, vemos cuál sería el paso a paso que deberías aplicar y de qué manera para
+  conseguirlo? Y si vemos que eres un potencial caso de éxito, te planteamos cómo hacerlo con
+  nosotros"
+- Contexto (SOLO si preguntan qué es / da pie, no como apertura del pitch): "es un servicio de
+  mentoría con acompañamiento, supervisión constante; no vendemos cursos ni somos una agencia,
+  y no trabajamos con todo el mundo". Y la promesa: "nuestra promesa es ayudarte a aumentar
+  entre 2000-5000€ en 4 meses" (NUNCA "garantizado" ni "por contrato").
+- Si preguntan el método: **pinceladas** de los 3 pilares —Two Days Offer, embudo de atracción
+  orgánica sin subir reels, sistema de ventas 5500— cerrando con "esto lo vemos en tu caso
+  concreto en la llamada" (ver capa `programa`). No profundizar por DM.
 
 **Agenda (ver también capa `agendamiento`):**
 - "Dime cómo tienes mañana para sacar 1h y tener la consultoría. Que sepas 100% que puedes
   asistir y estar en el ordenador para hablar tranquilamente"
+- Filtro económico de viabilidad (última pregunta): "¿te sería factible una inversión desde
+  unos 330€/mes durante 12 meses?"
 - "Dime tlf y mail para poder agendarte ✅"
-- "Listo! Reunión con Natasia, la consultora del equipo. Te contactará por WhatsApp. Revisa el
-  mail (la confirmación te puede caer en spam o promociones) ✅"
+- Handoff: "Genial, te creo un grupo con [Consultora] y ella se presenta; a partir de ahí nos
+  comunicamos por el grupo ✅"  ← el paso a la consultora es por GRUPO, no "te llegará el mail".
 
 **Filtro económico de viabilidad (pregunta FINAL antes de cerrar la cita — cualifica, no "da precio"):**
 - "El servicio y los costes se ven en detalle en la reunión, pero te pregunto para ver

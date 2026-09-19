@@ -16,10 +16,10 @@
  */
 
 // {owner} se sustituye por el nombre del dueño de la cuenta (tenant).
+// Framing HUMORÍSTICO (Dani): transparente (cumple art. 50) pero con guiño, no a disculpa.
 const DISCLOSURES = [
-  'Por cierto, te aviso: ahora mismo escribes con el asistente de IA de {owner} 🙂 Esta conversación la llevamos a medias entre {owner} y yo para que tengas respuesta al momento.',
-  'Te comento de paso: soy el asistente de IA de {owner}. Esta charla la gestionamos entre {owner} y yo, así te contesto con la mayor fluidez posible 🙌',
-  'Un apunte rápido y honesto: te responde el asistente de IA de {owner}. La conversación la llevamos a medias {owner} y yo para que no te quedes esperando.',
+  'Por cierto, te aviso: estás hablando con el asistente de IA de {owner} 😅 Porfa no me lo pongas muy difícil, que si lo hago mal {owner} me despide… y está la cosa muy jodida para encontrar curro entre tanto bot mediocre 🤖',
+  'Ah, te aviso de paso: soy el asistente de IA de {owner} jaja. Sé bueno conmigo, que como la líe {owner} me pone de patitas en la calle y el mercado está fatal para los bots 😂',
 ];
 
 function pickDisclosure(ownerName) {

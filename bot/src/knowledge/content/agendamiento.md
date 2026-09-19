@@ -48,23 +48,25 @@ Subir el ratio con opciones cerradas, nunca "¿cuándo puedes?" abierto:
 - "¿Te viene mejor de mañana o de tarde?"
 - "Perfecto, ¿mañana a las X o a las Y?" → **solo 2 opciones de hora.**
 
-## Transición a WhatsApp / formulario
+## Cierre de datos + handoff por GRUPO (Dani, 09-19)
 
-- "Perfecto, pues te mando el formulario de cualificación y en cuanto esté relleno, te
-  contacto para dejar la hora cerrada."
-- O: "Te paso mi número, me escribes y te dejo el enlace de la llamada. Así lo dejamos
-  cerrado y organizado."
-- El agendamiento/calendario se gestiona vía la operativa del equipo (GHL). El bot lleva
-  hasta el compromiso de hora + canal; la confirmación técnica la remata el sistema/equipo.
+Antes de cerrar, la pregunta de viabilidad económica (ver `captacion`/`cualificacion`):
+- "¿Te sería factible una inversión desde unos 330€/mes durante 12 meses?"
+
+Luego se piden los datos y se hace el handoff **creando un grupo con la consultora** (NO "te
+llega el mail" ni "te contactará por WhatsApp"):
+- "Dime tlf y mail para agendarte ✅"
+- "Genial, te creo un grupo con [Consultora] y ella se presenta. A partir de ahí nos
+  comunicamos por el grupo 👌"
+- La consultora (Natasia / Silvia) se presenta en el grupo y coordina la hora/enlace ahí.
+- El bot lleva hasta: viabilidad + datos + grupo creado. Lo demás lo lleva la consultora en el grupo.
 
 ## Confirmación y compromiso (reduce no-shows)
 
-Una vez hay hueco, cerrar el compromiso con marco de "reunión de negocios":
-- "Genial, te llegará la confirmación por WhatsApp."
-- "Para nosotros esto es una reunión de negocios y nos tomamos en serio el análisis del
-  tuyo. ¿100% puedes ese día a esa hora, o podría surgir algo que te lo impida?"
-- "Vamos con la agenda apretada, así que si finalmente no pudieras, avísanos lo antes
-  posible."
+Marco de "reunión de negocios", sin agobiar:
+- "Para nosotros esto es una reunión de negocios y nos tomamos en serio el análisis del tuyo.
+  ¿100% puedes ese día a esa hora, o podría surgir algo que te lo impida?"
+- "Vamos con la agenda apretada, así que si finalmente no pudieras, avísanos lo antes posible."
 
 ## Si dice que NO a la llamada
 
