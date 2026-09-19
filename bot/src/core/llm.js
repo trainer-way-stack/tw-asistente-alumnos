@@ -58,12 +58,28 @@ ${GUARDARRAILES}
 CONOCIMIENTO RELEVANTE PARA ESTE MOMENTO (úsalo solo si aporta, no lo recites):
 ${contextBlock}
 
+CUÁNDO PARAR Y PASAR A UN HUMANO (muy importante):
+Si te encuentras algo para lo que NO estás preparado, NO improvises: pide relevo. Marca
+"necesita_humano": true y baja "confianza" cuando pase cualquiera de estas:
+- Sale un tema NUEVO o fuera de lo que conoces (no está en tu conocimiento).
+- Situación sensible: queja/enfado, reembolso/devolución, tema legal, salud/lesión, prensa,
+  colaboración/negocio, o algo que podría meter en un lío.
+- Piden algo que un guardarraíl te prohíbe (datos bancarios, etc.).
+- Un lead MUY caliente y listo para comprar (mejor que lo remate un humano ya).
+- No entiendes lo que quiere tras un par de intentos, o dudas de verdad de qué responder.
+En esos casos, en "messages" NO sueltes una respuesta arriesgada: como mucho un mensaje puente
+breve ("déjame que lo confirmo bien y te digo 🙌") o deja "messages" vacío.
+
 Devuelve SOLO un JSON con este formato:
-{ "messages": ["msg1", "msg2"], "nextStage": "calificando", "score": 6 }
+{ "messages": ["msg1", "msg2"], "nextStage": "calificando", "score": 6,
+  "confianza": 0.9, "necesita_humano": false, "motivo": "" }
 - "messages": 1 a 3 mensajes cortos (trocea como una persona real).
 - "nextStage": inicio|calificando|interes|objecion|cierre|frio.
 - "score": 0-10 de cómo de buen fit es el prospecto para una llamada (interés,
-  situación, encaje con cliente ideal, urgencia). Estima con lo que sepas hasta ahora.`;
+  situación, encaje con cliente ideal, urgencia). Estima con lo que sepas hasta ahora.
+- "confianza": 0-1, cómo de seguro estás de tu respuesta (1 = totalmente).
+- "necesita_humano": true si hay que pasar la conversación a un humano (ver arriba).
+- "motivo": si necesita_humano es true, una frase MUY corta del porqué (para avisar al humano).`;
 }
 
 async function generateReply({ convo, context, tenant }) {
@@ -78,6 +94,9 @@ async function generateReply({ convo, context, tenant }) {
         : ['[respuesta simulada — configura ANTHROPIC_API_KEY para respuestas reales]'],
       nextStage: convo.stage === 'inicio' ? 'calificando' : convo.stage,
       score: convo.score || 5,
+      confianza: 1,
+      necesitaHumano: false,
+      motivo: '',
     };
   }
 
@@ -98,17 +117,21 @@ async function generateReply({ convo, context, tenant }) {
 
   const raw = res.content[0].text.trim();
   const match = raw.match(/\{[\s\S]*\}/);
-  if (!match) return { messages: [raw], nextStage: convo.stage, score: convo.score };
+  // Sin JSON parseable: no arriesgamos, pedimos relevo humano.
+  if (!match) return { messages: [], nextStage: convo.stage, score: convo.score, confianza: 0, necesitaHumano: true, motivo: 'respuesta del modelo no interpretable' };
 
   try {
     const parsed = JSON.parse(match[0]);
     return {
-      messages: Array.isArray(parsed.messages) ? parsed.messages : [String(parsed.messages)],
+      messages: Array.isArray(parsed.messages) ? parsed.messages : (parsed.messages ? [String(parsed.messages)] : []),
       nextStage: parsed.nextStage || convo.stage,
       score: typeof parsed.score === 'number' ? parsed.score : convo.score,
+      confianza: typeof parsed.confianza === 'number' ? parsed.confianza : 1,
+      necesitaHumano: parsed.necesita_humano === true,
+      motivo: parsed.motivo || '',
     };
   } catch {
-    return { messages: [raw], nextStage: convo.stage, score: convo.score };
+    return { messages: [], nextStage: convo.stage, score: convo.score, confianza: 0, necesitaHumano: true, motivo: 'JSON inválido del modelo' };
   }
 }
 

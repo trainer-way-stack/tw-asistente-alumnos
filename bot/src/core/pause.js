@@ -62,4 +62,16 @@ function resume(accountId, userId) {
   return saveConversation(convo);
 }
 
-module.exports = { shouldBotRespond, pause, pauseFor, autoPauseOnHumanReply, resume };
+/**
+ * HANDOVER por escalado del propio bot: el bot detecta algo que debe ver un humano,
+ * se pausa y cede la propiedad. El humano retoma (y luego `resume` si procede).
+ */
+function handoverToHuman(convo, reason = '') {
+  convo.owner = 'humano';
+  convo.paused = true;
+  convo.pausedUntil = null;
+  convo.handover = { at: Date.now(), reason };
+  return saveConversation(convo);
+}
+
+module.exports = { shouldBotRespond, pause, pauseFor, autoPauseOnHumanReply, handoverToHuman, resume };

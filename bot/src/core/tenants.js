@@ -18,6 +18,14 @@ const DEFAULT = {
   igAccessTokenEnv: 'IG_ACCESS_TOKEN',
   // tonePromptRef: apunta a la guía de estilo generada en fase 0 (capa TONO)
   tonePromptRef: 'default',
+
+  // --- Escalado a humano (relevo) ---
+  escalationEnabled: true,       // el bot puede pausar y avisar cuando algo no encaja
+  confidenceThreshold: 0.45,     // por debajo de esta confianza del modelo, escala
+  escalationChannel: 'ghl',      // 'ghl' (etiqueta → workflow WhatsApp) | 'none' | (futuro) 'whatsapp'
+  escalationTag: 'derivar-humano', // etiqueta que dispara el workflow de aviso en GHL
+  // Mensaje puente que envía el bot al prospecto al escalar (null = no enviar nada).
+  bridgeMessage: 'Déjame que lo confirmo bien y te digo enseguida 🙌',
 };
 
 // accountId (id de la cuenta de IG que RECIBE el mensaje) -> config

@@ -45,9 +45,11 @@ necesidad de conectar Instagram. Con `ANTHROPIC_API_KEY` responde con la metodol
 | `src/core/orchestrator.js` | **Cerebro**: orquesta pausa → RAG → LLM → scoring → aviso → envío → follow-up. |
 | `src/core/state.js` | Estado por conversación, clave `(accountId, userId)` (multi-cuenta). En memoria (→ BD). |
 | `src/core/tenants.js` | Config por cuenta/tenant (nombre, umbral scoring, horas follow-up, tono). La "puerta" para revender. |
-| `src/core/pause.js` | Pausa manual, **auto-pausa si escribe un humano**, pausa temporal, reanudar. |
+| `src/core/pause.js` | Pausa manual, **auto-pausa si escribe un humano**, pausa temporal, reanudar, **handover por escalado**. |
 | `src/core/disclosure.js` | Aviso de IA "a medias", una sola vez, nombre del dueño parametrizado. |
 | `src/core/scoring.js` | Decisión por score de cualificación (umbral → proponer llamada / descartar). |
+| `src/core/escalation.js` | **Decide ESCALAR a humano**: el modelo pide relevo (`necesita_humano`/`confianza`) o red de seguridad por palabras clave (legal, reembolso, salud, datos bancarios…). |
+| `src/core/notify.js` | **Aviso al humano** al escalar. Canal por tenant: `ghl` (pone etiqueta → workflow WhatsApp), `none`. Nunca rompe el flujo. |
 | `src/core/followup.js` | Recordatorio a las N h de silencio dentro de la ventana 24h (setTimeout → job queue). |
 | `src/core/llm.js` | Generación con Claude: 1ª respuesta nativa + score; guardarraíles; carga tono real. |
 | `src/knowledge/layers.js` | Definición de las capas de conocimiento. |
@@ -68,6 +70,13 @@ necesidad de conectar Instagram. Con `ANTHROPIC_API_KEY` responde con la metodol
 - ✅ **Follow-up dentro de 24h**: recordatorio suave a las 4h (config) si no responde; se cancela
   si responde.
 - ✅ **Multi-cuenta / reventa**: estado y config por tenant. Corre en la **cuenta de Dani**.
+- ✅ **Escalado a humano (18-09)**: si sale algo NUEVO/fuera de guion, sensible (legal, reembolso,
+  salud, datos bancarios, queja) o el modelo duda (confianza baja), el bot **se pausa, manda un
+  mensaje puente** al prospecto y **avisa a Miguel** poniendo la etiqueta `derivar-humano` en GHL
+  (un workflow de GHL la escucha y avisa por WhatsApp). Config por tenant en `tenants.js`
+  (`escalationEnabled`, `confidenceThreshold`, `escalationChannel`, `escalationTag`, `bridgeMessage`).
+  Probado en simulador. **FALTA (Dani):** crear el workflow en GHL que, al añadirse `derivar-humano`,
+  notifique a Miguel por WhatsApp.
 - ✅ **Guardarraíles**: no promete resultados, no da consejo médico, **no da precios por DM** (salvo insistencia fuerte → "desde 330 €/mes durante 12 meses", nunca el total), no
   comparte datos bancarios, mensajes cortos.
 

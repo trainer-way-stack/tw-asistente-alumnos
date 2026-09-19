@@ -13,9 +13,11 @@
 
 const { getConversation, saveConversation, appendMessage } = require('./state');
 const { getTenant } = require('./tenants');
-const { shouldBotRespond } = require('./pause');
+const { shouldBotRespond, handoverToHuman } = require('./pause');
 const { maybeDisclosure } = require('./disclosure');
 const { decideFromScore } = require('./scoring');
+const { decideEscalation } = require('./escalation');
+const { notifyHuman } = require('./notify');
 const { scheduleFollowup, cancelFollowup } = require('./followup');
 const { retrieve, selectLayers } = require('../knowledge/retriever');
 const { sendSequence } = require('../instagram/client');
@@ -39,7 +41,25 @@ async function handleIncomingMessage({ accountId, senderId, text }) {
 
   // 2) Generar respuesta + score.
   const isFirstBotTurn = !convo.messages.some((m) => m.role === 'assistant');
-  const { messages, nextStage, score } = await generateReply({ convo, context, tenant });
+  const reply = await generateReply({ convo, context, tenant });
+  const { messages, nextStage, score } = reply;
+
+  // 2b) ¿Hay que ESCALAR a un humano? (algo nuevo/fuera de guion/sensible o baja confianza)
+  const escalation = decideEscalation(reply, tenant, text);
+  if (escalation.escalate) {
+    handoverToHuman(convo, escalation.reason);
+    convo.score = score;
+    // Mensaje puente opcional (no soltamos la respuesta arriesgada del modelo).
+    const bridge = tenant?.bridgeMessage ? [tenant.bridgeMessage] : [];
+    if (bridge.length) {
+      await sendSequence(senderId, bridge);
+      bridge.forEach((m) => appendMessage(convo, 'assistant', m));
+    }
+    saveConversation(convo);
+    await notifyHuman({ tenant, convo, reason: escalation.reason });
+    console.log(`[orq] ${accountId}/${senderId}: ESCALADO a humano — ${escalation.reason}. Bot en pausa.`);
+    return bridge;
+  }
 
   // 3) Scoring de cualificación: decide el siguiente paso.
   convo.score = score;
