@@ -42,11 +42,13 @@ Claves de la propuesta:
 - Breve, sin argumentario. Una idea, una pregunta.
 - No rogar ni justificar de más. Si acepta, se agenda; si no, puerta abierta.
 
-## Transición al hueco (pregunta binaria de hora)
+## Transición al hueco
 
-Subir el ratio con opciones cerradas, nunca "¿cuándo puedes?" abierto:
-- "¿Te viene mejor de mañana o de tarde?"
-- "Perfecto, ¿mañana a las X o a las Y?" → **solo 2 opciones de hora.**
+Pedir hueco priorizando mañana y, si no, los próximos días, asegurando el compromiso:
+- "Dime cómo tienes mañana una hora —y si no es mañana, los próximos días— en la que 100%
+  sepas que puedes tener esa charla tranquilo delante del ordenador"
+- Al concretar, cerrar con opciones cerradas, nunca "¿cuándo puedes?" abierto: "¿mañana a
+  las X o a las Y?" → **2 opciones de hora.**
 
 ## Cierre de datos + handoff por GRUPO (Dani, 09-19)
 

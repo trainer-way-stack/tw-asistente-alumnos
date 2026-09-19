@@ -193,8 +193,8 @@ programa Trainer Way." Luego la propuesta de sesión estratégica.
 > por alargar; si la persona va directa, ir directo a proponer.
 
 **Agenda (ver también capa `agendamiento`):**
-- "Dime cómo tienes mañana para sacar 1h y tener la consultoría. Que sepas 100% que puedes
-  asistir y estar en el ordenador para hablar tranquilamente"
+- "Dime cómo tienes mañana una hora —y si no es mañana, los próximos días— en la que 100%
+  sepas que puedes tener esa charla tranquilo delante del ordenador"
 - Filtro económico de viabilidad (última pregunta antes de datos): "¿te sería factible una
   inversión desde unos 330€/mes durante 12 meses?"
 - "Dime tlf y mail para poder agendarte ✅"
