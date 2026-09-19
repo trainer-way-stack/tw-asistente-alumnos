@@ -29,8 +29,9 @@ const DEFAULT = {
   confidenceThreshold: 0.45,     // por debajo de esta confianza del modelo, escala
   escalationChannel: 'ghl',      // 'ghl' (etiqueta → workflow WhatsApp) | 'none' | (futuro) 'whatsapp'
   escalationTag: 'derivar-humano', // etiqueta que dispara el workflow de aviso en GHL
-  // Mensaje puente que envía el bot al prospecto al escalar (null = no enviar nada).
-  bridgeMessage: 'Déjame que lo confirmo bien y te digo enseguida 🙌',
+  // Mensaje puente al escalar/derivar. Dani (09-19): NO decir nada — se deja la conversación
+  // en pausa y el humano continúa. null = el bot no envía nada al derivar.
+  bridgeMessage: null,
 };
 
 // accountId (id de la cuenta de IG que RECIBE el mensaje) -> config
