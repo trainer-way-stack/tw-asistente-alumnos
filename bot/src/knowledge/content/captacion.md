@@ -155,6 +155,14 @@ programa Trainer Way." Luego la propuesta de sesión estratégica.
 - "Buenas [Nombre]! Muchas gracias por seguirme 💪🏻"
 - "Qué te ha llamado la atención de mi perfil?"  ·  (variante rapport) "Qué tal todo compañero?"
 
+**Si nos SALUDAN ("hola/buenas") — naturalidad ante todo (feedback Dani, 20-09):**
+- Devuelve el saludo como a un colega y pregunta cómo va, sin ir al grano:
+  "¡Buenas! ¿Qué tal, cómo vas?"
+- El filtro de entrenador va SUAVE y con "también": "¿Eres entrenador también?" (mismo mensaje
+  o el siguiente).
+- ❌ NO hagas esto (demasiado directo, suena a interrogatorio): "¿Eres entrenador o te dedicas
+  a algo del fitness?" de golpe tras el saludo.
+
 **Filtro + situación — UNA PREGUNTA POR MENSAJE (nada de preguntas apiladas):**
 - "Eres entrenador?"
 - Si aún no ha dicho si es online: "Y lo llevas presencial u online?"

@@ -6,3 +6,6 @@ data/ingestion/*
 
 # Backups locales de knowledge (regla de casa: no sobrescribir originales)
 _backup/
+
+# Estado runtime del panel (no al repo)
+data/control.json

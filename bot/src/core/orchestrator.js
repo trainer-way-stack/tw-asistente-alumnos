@@ -20,28 +20,25 @@ const { decideEscalation } = require('./escalation');
 const { notifyHuman } = require('./notify');
 const { scheduleFollowup, cancelFollowup } = require('./followup');
 const { retrieve, selectLayers } = require('../knowledge/retriever');
-const { sendSequence } = require('../instagram/client');
+const { sendSequence, getUsername } = require('../instagram/client');
 const { generateReply, generateReminder } = require('./llm');
-
-/**
- * Allowlist de PRUEBAS: si ALLOWED_SENDER_IDS está definido (lista de ids de IG separados por
- * comas), el bot SOLO responde a esas cuentas y IGNORA al resto. Si está vacío, responde a todos
- * (comportamiento normal de producción). Sirve para probar con cuentas concretas sin que el bot
- * conteste a nadie más.
- */
-function allowlist() {
-  return (process.env.ALLOWED_SENDER_IDS || '').split(',').map((s) => s.trim()).filter(Boolean);
-}
+const control = require('./control');
 
 async function handleIncomingMessage({ accountId, senderId, text }) {
-  const allowed = allowlist();
-  if (allowed.length && !allowed.includes(String(senderId))) {
-    console.log(`[orq] ${accountId}/${senderId}: fuera de la allowlist de pruebas, se ignora.`);
+  const tenant = getTenant(accountId);
+  const convo = getConversation(accountId, senderId);
+  const isNew = convo.messages.length === 0; // primera vez que escribe
+
+  // Control de captación (panel de Miguel): modo allowlist / nuevas / todas.
+  if (!control.isAllowed(senderId, isNew)) {
+    console.log(`[orq] ${accountId}/${senderId}: no habilitada por el control de captación, se ignora.`);
     return;
   }
 
-  const tenant = getTenant(accountId);
-  const convo = getConversation(accountId, senderId);
+  // Resolver @usuario (best-effort, una vez) para que el panel sea legible.
+  if (!convo.username) {
+    convo.username = await getUsername(senderId).catch(() => null);
+  }
 
   cancelFollowup(convo);              // respondió -> no mandamos recordatorio
   convo.followupCount = 0;            // respondió -> reinicia la cadencia de follow-up

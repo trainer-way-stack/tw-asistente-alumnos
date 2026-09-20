@@ -23,6 +23,7 @@ function newConversation(accountId, userId) {
     paused: false,             // pausa manual/temporal (ver core/pause.js)
     pausedUntil: null,
     disclosureSent: false,     // aviso de IA enviado (una sola vez)
+    username: null,            // @usuario de IG (best-effort, para el panel)
     score: 0,                  // scoring de cualificación 0-10 (ver core/scoring.js)
     followupCount: 0,          // recordatorios enviados en esta conversación
     followupHandle: null,      // handle del recordatorio programado (para cancelar)
@@ -51,4 +52,26 @@ function appendMessage(convo, role, text) {
   return convo;
 }
 
-module.exports = { getConversation, saveConversation, appendMessage };
+/** Lista resumida de conversaciones (para el panel). Más recientes primero. */
+function listConversations() {
+  return [...store.values()]
+    .sort((a, b) => (b.updatedAt || 0) - (a.updatedAt || 0))
+    .map((c) => {
+      const last = c.messages[c.messages.length - 1];
+      return {
+        accountId: c.accountId,
+        userId: c.userId,
+        username: c.username || null,
+        stage: c.stage,
+        owner: c.owner,
+        paused: !!c.paused,
+        score: c.score,
+        msgs: c.messages.length,
+        lastRole: last?.role || null,
+        lastText: last ? String(last.text).slice(0, 140) : '',
+        updatedAt: c.updatedAt,
+      };
+    });
+}
+
+module.exports = { getConversation, saveConversation, appendMessage, listConversations };

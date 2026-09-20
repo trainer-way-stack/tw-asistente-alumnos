@@ -55,4 +55,16 @@ async function sendSequence(recipientId, messages) {
   await sendTyping(recipientId, false);
 }
 
-module.exports = { sendText, sendTyping, sendSequence };
+/** Resuelve el @usuario (o nombre) de un IGSID que nos ha escrito. Best-effort. */
+async function getUsername(igsid) {
+  const token = process.env.IG_ACCESS_TOKEN;
+  if (!token) return null;
+  try {
+    const res = await fetch(`${GRAPH_URL}/${igsid}?fields=username,name&access_token=${token}`);
+    if (!res.ok) return null;
+    const j = await res.json();
+    return j.username || j.name || null;
+  } catch { return null; }
+}
+
+module.exports = { sendText, sendTyping, sendSequence, getUsername };
