@@ -23,7 +23,23 @@ const { retrieve, selectLayers } = require('../knowledge/retriever');
 const { sendSequence } = require('../instagram/client');
 const { generateReply, generateReminder } = require('./llm');
 
+/**
+ * Allowlist de PRUEBAS: si ALLOWED_SENDER_IDS está definido (lista de ids de IG separados por
+ * comas), el bot SOLO responde a esas cuentas y IGNORA al resto. Si está vacío, responde a todos
+ * (comportamiento normal de producción). Sirve para probar con cuentas concretas sin que el bot
+ * conteste a nadie más.
+ */
+function allowlist() {
+  return (process.env.ALLOWED_SENDER_IDS || '').split(',').map((s) => s.trim()).filter(Boolean);
+}
+
 async function handleIncomingMessage({ accountId, senderId, text }) {
+  const allowed = allowlist();
+  if (allowed.length && !allowed.includes(String(senderId))) {
+    console.log(`[orq] ${accountId}/${senderId}: fuera de la allowlist de pruebas, se ignora.`);
+    return;
+  }
+
   const tenant = getTenant(accountId);
   const convo = getConversation(accountId, senderId);
 
