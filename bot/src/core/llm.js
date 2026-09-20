@@ -17,8 +17,9 @@
  */
 
 // Modelo configurable por env (BOT_MODEL) para poder cambiarlo/hacer A/B sin tocar código.
-// Por defecto Sonnet 4.5 (buena calidad/coste para un bot de mucho volumen).
-const MODEL = 'claude-sonnet-4-5';
+// Por defecto Sonnet 5: en el A/B respetó mejor las reglas (derivación) y sonó natural, a una
+// fracción del coste de Opus. Se puede sobreescribir con BOT_MODEL (p. ej. opus para casos duros).
+const MODEL = 'claude-sonnet-5';
 const currentModel = () => process.env.BOT_MODEL || MODEL;
 const { loadLayer } = require('../knowledge/content');
 
@@ -129,7 +130,10 @@ async function generateReply({ convo, context, tenant }) {
 
   const res = await client.messages.create({
     model: currentModel(),
-    max_tokens: 400,
+    max_tokens: 700,
+    // Sonnet 5 activa "thinking" por defecto y sin tope se come el presupuesto → JSON truncado.
+    // Para un DM corto no hace falta; lo desactivamos (más rápido, más barato, determinista).
+    thinking: { type: 'disabled' },
     system: buildSystem({ context, tenant, isFirstBotTurn }),
     messages: history.length ? history : [{ role: 'user', content: '(inicio de conversación)' }],
   });
@@ -170,7 +174,8 @@ async function generateReminder({ convo, tenant }) {
 
   const res = await client.messages.create({
     model: currentModel(),
-    max_tokens: 150,
+    max_tokens: 200,
+    thinking: { type: 'disabled' },
     system: `Eres el asistente de ${tenant?.ownerName || 'el equipo'}. La persona dejó de
 responder hace un rato. Escribe UN recordatorio MUY corto, ligero y natural para retomar, sin
 presionar (estilo real: "pudiste leerme??", "todo bien??", "sigues por ahí?", "te leo cuando

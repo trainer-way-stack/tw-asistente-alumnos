@@ -88,11 +88,16 @@ async function upsertContactByIg({ igUserId, name, tag, motivo }) {
     return { ok: true, contactId: existing.id, mapped: 'updated' };
   }
 
+  // GHL exige al menos firstName/lastName/email/phone; "name" a secas da 422.
+  const parts = String(name || `IG ${igUserId}`).trim().split(/\s+/);
+  const firstName = parts[0] || 'IG';
+  const lastName = parts.slice(1).join(' ') || igUserId;
   const created = await ghlFetch('/contacts/', {
     method: 'POST',
     body: JSON.stringify({
       locationId: location,
-      name: name || `IG ${igUserId}`,
+      firstName,
+      lastName,
       tags: tag ? [tag] : [],
       customFields,
     }),
