@@ -97,7 +97,11 @@ Para conectar de verdad (no solo simulador):
 - **App en Meta for Developers** con permisos `instagram_business_basic` +
   `instagram_business_manage_messages` (este último requiere **App Review** de Meta con vídeo de
   uso — es lo que más tarda; prepararlo bien).
-- **Servidor con webhook público HTTPS** (ya tenemos `src/server.js`); desplegarlo.
+- **Servidor con webhook público HTTPS** ✅ **DESPLEGADO (20-09) en Railway**: proyecto
+  `tw-setter-ia` (workspace trainer-way-stack), URL **`https://tw-setter-ia-production.up.railway.app`**.
+  `/health` OK y verificación de webhook OK. Variables en Railway: ANTHROPIC_API_KEY, BOT_MODEL
+  (claude-sonnet-5), GHL_API_KEY, GHL_LOCATION_ID, GHL_IG_FIELD_ID, IG_VERIFY_TOKEN. FALTAN (tras
+  crear la app de Meta): IG_ACCESS_TOKEN, IG_APP_SECRET, IG_ACCOUNT_ID. Deploy: `railway up` desde `bot/`.
 - Reglas de plataforma a respetar: **ventana de 24h** (solo escribir dentro de 24h desde el último
   mensaje del usuario), **solo respuestas a acción del usuario**, **Handover Protocol** (humano
   toma el control).
