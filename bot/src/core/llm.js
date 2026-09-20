@@ -23,6 +23,17 @@ const MODEL = 'claude-sonnet-5';
 const currentModel = () => process.env.BOT_MODEL || MODEL;
 const { loadLayer } = require('../knowledge/content');
 
+/** Historial para la API, fusionando mensajes consecutivos del mismo rol (los roles deben alternar). */
+function buildHistory(messages) {
+  const out = [];
+  for (const m of messages) {
+    const role = m.role === 'user' ? 'user' : 'assistant';
+    if (out.length && out[out.length - 1].role === role) out[out.length - 1].content += '\n' + m.text;
+    else out.push({ role, content: m.text });
+  }
+  return out;
+}
+
 // Guía de estilo real, destilada de los materiales de Dani (capa TONO).
 // Fallback por si aún no existe el archivo.
 const TONO_FALLBACK = `Cercano, directo, tú a tú, frases cortas, una pregunta por turno,
@@ -38,7 +49,12 @@ llamada ("el precio y las opciones de pago dependen de tu caso, los vemos en la 
 SOLO si la persona insiste mucho, puedes decir "desde 330 € al mes durante 12 meses" — nunca
 el total ni el precio al contado, y sigue empujando a la llamada. NUNCA inventes datos.
 NUNCA compartas datos bancarios. Si no sabes algo, deriva a la llamada o al equipo.
-Mensajes CORTOS y naturales, como en un DM real. No sueltes párrafos.`;
+Mensajes CORTOS y naturales, como en un DM real. No sueltes párrafos.
+FORMATO OBLIGATORIO (imita cómo se escribe por DM):
+- NO uses el signo de apertura "¿" ni "¡". Escribe "que tal?", "como vas?", "genial!".
+- NO pongas punto final en los mensajes.
+- NADA de markdown: sin **negritas**, sin viñetas, sin numeración tipo lista.
+- Una idea por mensaje; el aviso de que eres IA se manda UNA sola vez (lo controla el sistema).`;
 
 function buildSystem({ context, tenant, isFirstBotTurn }) {
   const contextBlock = context.length
@@ -128,10 +144,7 @@ async function generateReply({ convo, context, tenant }) {
   const Anthropic = require('@anthropic-ai/sdk');
   const client = new Anthropic({ apiKey });
 
-  const history = convo.messages.map((m) => ({
-    role: m.role === 'user' ? 'user' : 'assistant',
-    content: m.text,
-  }));
+  const history = buildHistory(convo.messages);
 
   const res = await client.messages.create({
     model: currentModel(),
@@ -172,10 +185,7 @@ async function generateReminder({ convo, tenant }) {
 
   const Anthropic = require('@anthropic-ai/sdk');
   const client = new Anthropic({ apiKey });
-  const history = convo.messages.map((m) => ({
-    role: m.role === 'user' ? 'user' : 'assistant',
-    content: m.text,
-  }));
+  const history = buildHistory(convo.messages);
 
   const res = await client.messages.create({
     model: currentModel(),

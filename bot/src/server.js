@@ -13,7 +13,7 @@ require('dotenv').config();
 const crypto = require('crypto');
 const express = require('express');
 
-const { handleIncomingMessage } = require('./core/orchestrator');
+const { handleIncomingMessage, noteOutbound } = require('./core/orchestrator');
 const control = require('./core/control');
 const { listConversations } = require('./core/state');
 const { pause, resume } = require('./core/pause');
@@ -68,9 +68,17 @@ app.post('/webhook', async (req, res) => {
 
     for (const entry of body.entry || []) {
       for (const event of entry.messaging || []) {
-        // Ignorar 'echoes' (mensajes que enviamos nosotros mismos).
-        if (event.message?.is_echo) continue;
         if (!event.message?.text) continue; // de momento solo texto
+
+        // 'echo' = mensaje SALIENTE de la cuenta (lo mandó el bot o un humano a mano).
+        if (event.message.is_echo) {
+          noteOutbound({
+            accountId: event.sender.id,     // la cuenta que envía
+            userId: event.recipient.id,     // el prospecto destinatario
+            text: event.message.text,
+          });
+          continue;
+        }
 
         await handleIncomingMessage({
           accountId: event.recipient.id, // la cuenta de IG que recibe = el tenant

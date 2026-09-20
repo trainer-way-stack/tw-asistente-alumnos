@@ -46,14 +46,19 @@ function removeAllow(id) {
   state.allow = state.allow.filter((x) => x !== id); persist();
   return state.allow;
 }
-/** ¿Debe el bot atender a este sender? isNew = es la primera vez que escribe. */
-function isAllowed(senderId, isNew) {
-  const id = String(senderId);
+/**
+ * ¿Debe el bot atender a este sender?
+ * - 'todas': a todos.
+ * - 'allowlist' y 'nuevas': solo si está en la lista `allow`. La diferencia es CÓMO se llena la
+ *   lista: en 'nuevas' se añade sola cuando Miguel ABRE la conversación (ver noteOutbound en el
+ *   orquestador); en 'allowlist' la activa Miguel a mano desde el panel. Así, una conversación ya
+ *   existente en IG (inbound primero, sin que Miguel la abra) NO se responde.
+ */
+function isAllowed(senderId) {
   if (state.mode === 'todas') return true;
-  if (state.allow.includes(id)) return true;
-  if (state.mode === 'nuevas' && isNew) { addAllow(id); return true; } // se engancha y se recuerda
-  return false;
+  return state.allow.includes(String(senderId));
 }
+function getMode() { return state.mode; }
 function addFeedback({ texto, autor, ref } = {}) {
   const f = { ts: Date.now(), texto: String(texto || '').slice(0, 2000), autor: autor || 'Miguel', ref: ref || '' };
   state.feedback.unshift(f);
@@ -64,4 +69,4 @@ function addFeedback({ texto, autor, ref } = {}) {
 }
 function listFeedback() { return state.feedback; }
 
-module.exports = { getState, setMode, addAllow, removeAllow, isAllowed, addFeedback, listFeedback, MODES };
+module.exports = { getState, getMode, setMode, addAllow, removeAllow, isAllowed, addFeedback, listFeedback, MODES };
