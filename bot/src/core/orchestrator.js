@@ -63,7 +63,8 @@ async function handleIncomingMessage({ accountId, senderId, text }) {
  */
 function noteOutbound({ accountId, userId, text }) {
   const convo = getConversation(accountId, userId);
-  const botSentIt = convo.messages.some((m) => m.role === 'assistant' && m.text === text);
+  const t = String(text).trim();
+  const botSentIt = convo.messages.some((m) => m.role === 'assistant' && String(m.text).trim() === t);
   if (botSentIt) return; // es el eco de un mensaje del propio bot
   const knownToBot = convo.messages.length > 0;
   if (!knownToBot && control.getMode() === 'nuevas') {
@@ -138,11 +139,12 @@ async function processConversation(accountId, senderId) {
     ? (isFirstBotTurn ? [...messages, disclosure] : [disclosure, ...messages])
     : messages;
 
-  // 5) Enviar + registrar.
-  await sendSequence(senderId, outgoing);
+  // 5) Registrar ANTES de enviar: así, cuando lleguen los 'echoes' de IG de nuestros propios
+  // mensajes, ya están en el historial y no se confunden con una intervención humana.
   outgoing.forEach((m) => appendMessage(convo, 'assistant', m));
   convo.stage = stage;
   saveConversation(convo);
+  await sendSequence(senderId, outgoing);
 
   // 6) Programar recordatorio si sigue vivo (dentro de la ventana 24h).
   scheduleFollowup(convo, async (fresh, t) => {
